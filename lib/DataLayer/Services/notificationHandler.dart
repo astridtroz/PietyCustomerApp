@@ -7,14 +7,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationHandler {
   FlutterLocalNotificationsPlugin? notification;
   AndroidInitializationSettings? androidSetting;
-  IOSInitializationSettings? iOSSetting;
+  DarwinInitializationSettings? iOSSetting;
   InitializationSettings? initializationSettings;
 
   NotificationHandler() {
     notification = FlutterLocalNotificationsPlugin();
     //TODO add notification icon
     androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
-    iOSSetting = IOSInitializationSettings(
+    iOSSetting = DarwinInitializationSettings(
         onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
     initializationSettings = InitializationSettings(android: androidSetting, iOS: iOSSetting);
     _initialize();
@@ -26,7 +26,7 @@ class NotificationHandler {
     return AndroidNotificationDetails(
       '0',
       'Order',
-      'Order related notifications',
+      // 'Order related notifications',
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
@@ -34,8 +34,8 @@ class NotificationHandler {
   }
 
   @deprecated
-  IOSNotificationDetails _iOSNotificationDetails() {
-    return IOSNotificationDetails();
+  DarwinNotificationDetails _iOSNotificationDetails() {
+    return DarwinNotificationDetails();
   }
 
   void showNotification({
@@ -56,15 +56,15 @@ class NotificationHandler {
         AndroidNotificationDetails(
       '0',
       'Order',
-      'Order related notifications',
+      // 'Order related notifications',
       importance: Importance.high,
       priority: Priority.high,
       ticker: 'ticker',
-      category: "reminder",
+      category: AndroidNotificationCategory.reminder,
       // sound: RawResourceAndroidNotificationSound("alarm_clock"),
     );
-    IOSNotificationDetails iOSPlatformChannelSpecifics =
-        IOSNotificationDetails();
+    DarwinNotificationDetails iOSPlatformChannelSpecifics =
+        DarwinNotificationDetails();
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     return notificationDetails;
@@ -72,7 +72,7 @@ class NotificationHandler {
 
   void _initialize() async {
     await notification!.initialize(
-      initializationSettings,
+      initializationSettings!,
       onSelectNotification: _onSelectNotification,
     );
   }
@@ -83,8 +83,8 @@ class NotificationHandler {
     }
   }
 
-  Future _onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
+  void _onDidReceiveLocalNotification(
+      int id, String? title, String? body, String? payload) async {
     //TODO: iOS notifcation implementation
   }
 }

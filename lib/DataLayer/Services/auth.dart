@@ -10,7 +10,7 @@ abstract class AuthBase {
 }
 
 class Auth implements AuthBase {
-  User2 _userFromFirebase(User user) {
+  User2 _userFromFirebase(User? user) {
     if (user == null) {
       return null!;
     }
@@ -19,7 +19,7 @@ class Auth implements AuthBase {
 
   @override
   Stream<User2> get onAuthStateChanged {
-    return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   final _firebaseAuth = FirebaseAuth.instance;
@@ -46,7 +46,7 @@ class Auth implements AuthBase {
 
   @Deprecated("Use SignInMethods.phoneWithOTP instead")
   signInWithOTP(smsCode, verId) {
-    AuthCredential authCreds = PhoneAuthProvider.getCredential(
+    AuthCredential authCreds = PhoneAuthProvider.credential(
         verificationId: verId, smsCode: smsCode);
     signIn(authCreds);
   }

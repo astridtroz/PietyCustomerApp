@@ -17,9 +17,9 @@ class HandleSignIn extends StatelessWidget {
     StoreBloc _storeBloc = BlocProvider.of<StoreBloc>(context);
     AdminBloc _adminBloc = BlocProvider.of<AdminBloc>(context);
 
-    return StreamBuilder<User>(
+    return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting ||
             snapshot.connectionState == ConnectionState.none) {
           return Scaffold(

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 abstract class StoreEvent extends Equatable {

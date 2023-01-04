@@ -6,8 +6,11 @@ import '../DataLayer/Models/UserModels/UserAddress.dart';
 
 abstract class UserEvent extends Equatable {
   const UserEvent();
+
   @override
-  List<Object>? get props => null;
+  List<Object> get props {
+    return [];
+  }
 }
 
 class UpdateFcmToken extends UserEvent {

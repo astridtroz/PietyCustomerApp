@@ -39,7 +39,7 @@ class CloudMessaging {
   }
 
   void _requestPermission() {
-    _firebaseMessaging!.requestNotificationPermissions(
+    _firebaseMessaging!.requestPermission(
       const IosNotificationSettings(
         sound: true,
         badge: true,

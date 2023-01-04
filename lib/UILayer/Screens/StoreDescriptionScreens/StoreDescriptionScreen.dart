@@ -1188,14 +1188,14 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen>
                                                                     height: 15),
                                                                 Container(
                                                                     height: 100,
-                                                                    child: StaggeredGridView.countBuilder(
+                                                                    child: MasonryGridView.count(
                                                                         crossAxisCount: 2,
                                                                         itemCount: snapshot.data!.length,
                                                                         shrinkWrap: true,
                                                                         padding: EdgeInsets.all(2),
-                                                                        staggeredTileBuilder: (int index) => StaggeredTile.fit(
-                                                                              1,
-                                                                            ),
+                                                                        // staggeredTileBuilder: (int index) => StaggeredTile.fit(
+                                                                        //       1,
+                                                                        //     ),
                                                                         primary: false,
                                                                         mainAxisSpacing: 1.0,
                                                                         crossAxisSpacing: 1.0,

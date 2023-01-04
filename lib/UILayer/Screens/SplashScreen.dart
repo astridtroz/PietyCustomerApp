@@ -20,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  FirebaseUser? user;
+  User? user;
   AdminBloc? _adminBloc;
   StoreBloc? _storeBloc;
   UserBloc? _userBloc;

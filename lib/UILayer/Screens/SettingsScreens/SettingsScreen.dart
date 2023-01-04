@@ -139,7 +139,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                 ),
                                               ),
                                               onChanged: (val) => name = val,
-                                              attribute: "name",
+                                              // attribute: "name",
+                                              name: 'name',
                                             ),
                                           ),
                                           SizedBox(height: 20),
@@ -286,10 +287,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Radius.circular(10),
                     ),
                   ),
-                  child: StreamBuilder<User>(
+                  child: StreamBuilder<User?>(
                       stream: FirebaseAuth.instance.authStateChanges(),
                       builder:
-                          (BuildContext context, AsyncSnapshot<User> snapshot) {
+                          (BuildContext context, AsyncSnapshot<User?> snapshot) {
                         return TextButton(
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();

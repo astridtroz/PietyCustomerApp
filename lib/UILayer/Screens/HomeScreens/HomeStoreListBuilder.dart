@@ -716,7 +716,7 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                                 Image.asset(
                                                     "assets/Images/machine.png"),
                                             imageUrl:
-                                                loadedStores[count].storeLogo,
+                                                loadedStores[count].storeLogo!,
                                             fit: BoxFit.cover,
                                             errorWidget:
                                                 (context, url, error) =>

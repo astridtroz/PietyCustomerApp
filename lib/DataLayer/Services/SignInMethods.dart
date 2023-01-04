@@ -42,7 +42,7 @@ class SignInMethods {
           // print("UID:: " + res.user.uid);
           await FirebaseFirestore.instance
               .collection("customers")
-              .doc(res.user.uid)
+              .doc(res.user?.uid)
               .get()
               .then((value) {
             // print("retured value::::" + value.exists.toString());
@@ -51,19 +51,19 @@ class SignInMethods {
               userBloc!.mapEventToState(
                 AddUserDetails(
                   user: User2(
-                    uid: res.user.uid,
+                    uid: res.user?.uid,
                     //addresses: [],
                     fcmToken: Constants.fcmToken!,
                     orderCount: 10,
                     joiningDate: DateTime.now(),
                     phoneNumbers: [
                       PhoneNumber(
-                        number: res.user.phoneNumber.substring(
-                          res.user.phoneNumber.length - 10,
+                        number: res.user?.phoneNumber?.substring(
+                          (res.user?.phoneNumber?.length)! - 10,
                         ),
-                        countryCode: res.user.phoneNumber.substring(
+                        countryCode: res.user?.phoneNumber?.substring(
                           0,
-                          res.user.phoneNumber.length - 10,
+                          (res.user?.phoneNumber?.length)! - 10,
                         ),
                       ),
                     ],
@@ -94,8 +94,8 @@ class SignInMethods {
     required UserBloc userBloc,
   }) async {
     try {
-      AuthCredential authCredentials = PhoneAuthProvider.getCredential(
-        verificationId: _phoneVerificationID,
+      AuthCredential authCredentials = PhoneAuthProvider.credential(
+        verificationId: _phoneVerificationID!,
         smsCode: otp,
       );
       UserCredential res =
@@ -103,7 +103,7 @@ class SignInMethods {
       // print("UID:: " + res.user.uid);
       await FirebaseFirestore.instance
           .collection("customers")
-          .doc(res.user.uid)
+          .doc(res.user?.uid)
           .get()
           .then((value) {
         // print("retured value::::" + value.exists.toString());
@@ -112,19 +112,19 @@ class SignInMethods {
           userBloc.mapEventToState(
             AddUserDetails(
               user: User2(
-                uid: res.user.uid,
+                uid: res.user?.uid,
                 addresses: [],
                 fcmToken: Constants.fcmToken!,
                 orderCount: 10,
                 joiningDate: DateTime.now(),
                 phoneNumbers: [
                   PhoneNumber(
-                    number: res.user.phoneNumber.substring(
-                      res.user.phoneNumber.length - 10,
+                    number: res.user?.phoneNumber?.substring(
+                      (res.user?.phoneNumber?.length)! - 10,
                     ),
-                    countryCode: res.user.phoneNumber.substring(
+                    countryCode: res.user?.phoneNumber?.substring(
                       0,
-                      res.user.phoneNumber.length - 10,
+                      (res.user?.phoneNumber?.length)! - 10,
                     ),
                   ),
                 ],
@@ -141,7 +141,7 @@ class SignInMethods {
       Fluttertoast.showToast(msg: e.message!);
       print("Platform Exception: ${e.details}");
     } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(msg: e.message);
+      Fluttertoast.showToast(msg: e.message!);
       print("Auth Exception: ${e.message}");
     } on Exception catch (e) {
       Fluttertoast.showToast(msg: "Unknown Error");

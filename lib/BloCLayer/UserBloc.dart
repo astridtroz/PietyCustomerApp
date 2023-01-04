@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:modern_form_esys_flutter_share/modern_form_esys_flutter_share.dart';
 
@@ -99,7 +100,7 @@ class UserBloc extends Bloc {
   StreamSink get allAddressSink => _allAddressController.sink;
   Stream get allAddressStream => _allAddressController.stream;
 
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  // final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   UserBloc.initialize() {
     mapEventToState(GetUserDetails());
@@ -158,11 +159,10 @@ class UserBloc extends Bloc {
       });
     } else if (event is GetUserLocation) {
       print("Event is ${event.toString()}");
-      geolocator
+      Geolocator
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
           .then((Position position) {
-        geolocator
-            .placemarkFromCoordinates(position.latitude, position.longitude)
+        placemarkFromCoordinates(position.latitude, position.longitude)
             .then((p) async {
           Placemark place = p[0];
           print(
@@ -204,10 +204,10 @@ class UserBloc extends Bloc {
       });
     } else if (event is GetUserDetails) {
       await FirebaseAuth.instance.authStateChanges().listen((user) async {
-        await user.getIdToken()?.then((token) async {
+        await user?.getIdToken()?.then((token) async {
           FirebaseFirestore.instance
               .collection("customers")
-              .doc(user.uid)
+              .doc(user?.uid)
               .snapshots()
               .listen((DocumentSnapshot snapshot) {
             _userAddressList = [];
@@ -314,14 +314,23 @@ class UserBloc extends Bloc {
       ///then use current location
       _selectedUserAddress = _user!.addresses![event.index];
       print("selectedAddress:: " + _selectedUserAddress!.displayAddress());
-      List<Placemark> place = await geolocator.placemarkFromAddress(
-          _user!.addresses![event.index].displayAddress());
+      final List<Location> locations = await locationFromAddress(
+          _user!.addresses![event.index].displayAddress()
+      );
+      if (locations == null || locations.isEmpty) {
+        return;
+      }
+      final Location firstLocation = locations.first;
+      List<Placemark> place = await placemarkFromCoordinates(
+        firstLocation.latitude,
+        firstLocation.longitude,
+      );
       selectedAddressSink.add(_user!.addresses![event.index]);
       userPlace = place[0];
       positionSink.add(place[0]);
       Fluttertoast.showToast(msg: "Location Changed");
     } else if (event is AddAddressByLatLng) {
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+      List<Placemark> p = await placemarkFromCoordinates(
           event.latLng.latitude, event.latLng.longitude);
 
       Placemark place = p[0];
@@ -376,7 +385,7 @@ class UserBloc extends Bloc {
   }
 
   void initDynamicLinks() async {
-    final PendingDynamicLinkData data =
+    final PendingDynamicLinkData? data =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
     FirebaseDynamicLinks.instance.onLink(
