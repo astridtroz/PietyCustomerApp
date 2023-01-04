@@ -10,8 +10,9 @@ class StoreReviewList {
     this.review,
   });
 
-  StoreReviewList.fromSnapshot(DocumentSnapshot snapshot) {
-    userName = snapshot.data()["userName"];
-    review = Review.fromJson(snapshot.data()["userReview"]);
+  StoreReviewList.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    userName = snapshot.data()!["userName"];
+    review = Review.fromJson(snapshot.data()!["userReview"]);
   }
 }

@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '/BloCLayer/AdminBloc.dart';
 import '/DataLayer/Models/Other/Enums.dart';
 import '/DataLayer/Models/adminModels/adminMetaData.dart';
 import '/DataLayer/Services/HandleSignIn.dart';
 import '/UILayer/Widgets/noNetwork.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../BloCLayer/UserBloc.dart';
 import '../../../BloCLayer/UserEvent.dart';
 import '../../../DataLayer/Models/UserModels/User.dart';
@@ -255,12 +256,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         clipBehavior: Clip.antiAlias,
                                         // shape: CircleBorder(),
                                         child: CachedNetworkImage(
-                                          imageUrl:
-                                              snapshot.data!.social![index].icon,
+                                          imageUrl: snapshot.data!
+                                              .social![index].icon as String,
                                         ),
                                         onPressed: () {
-                                          _launchURL(
-                                              snapshot.data!.social![index].link!);
+                                          _launchURL(snapshot
+                                              .data!.social![index].link!);
                                         },
                                       ),
                                     ),
@@ -287,8 +288,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   child: StreamBuilder<User>(
                       stream: FirebaseAuth.instance.authStateChanges(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<User> snapshot) {
+                      builder:
+                          (BuildContext context, AsyncSnapshot<User> snapshot) {
                         return TextButton(
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();

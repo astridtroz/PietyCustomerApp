@@ -61,7 +61,7 @@ class AdminMetaData {
 
   AdminMetaData.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     this.featureOffer = [];
-    if (snapshot.data()["featureOffer"] != null) {
+    if (snapshot.data()!["featureOffer"] != null) {
       for (var i = 0; i < snapshot.data()!["featureOffer"].length; i++) {
         this
             .featureOffer
@@ -71,48 +71,50 @@ class AdminMetaData {
     this.dashboradImage = [];
     if (snapshot.data()!["dashboardImage"] != null) {
       for (var i = 0; i < snapshot.data()!["dashboardImage"].length; i++) {
-        this.dashboradImage?.add(snapshot.data()["dashboardImage"][i]);
+        this.dashboradImage?.add(snapshot.data()!["dashboardImage"][i]);
       }
     }
-    this.razorPayFees = snapshot.data()["razorPayFees"].toDouble();
-    this.razorPayTax = snapshot.data()["razorPayTax"].toDouble();
-    this.androidAppUrl = snapshot.data()["androidAppUrl"] ?? "";
-    this.iOSAppUrl = snapshot.data()["iOSAppUrl"] ?? "";
-    this.discountOnOrderOnly = snapshot.data()["discountOnOrderOnly"];
-    this.tc = snapshot.data()["T&C"] ?? "unknown";
-    this.agreement = snapshot.data()["legalAgreement"] ?? "unknown";
+    this.razorPayFees = snapshot.data()!["razorPayFees"].toDouble();
+    this.razorPayTax = snapshot.data()!["razorPayTax"].toDouble();
+    this.androidAppUrl = snapshot.data()!["androidAppUrl"] ?? "";
+    this.iOSAppUrl = snapshot.data()!["iOSAppUrl"] ?? "";
+    this.discountOnOrderOnly = snapshot.data()!["discountOnOrderOnly"];
+    this.tc = snapshot.data()!["T&C"] ?? "unknown";
+    this.agreement = snapshot.data()!["legalAgreement"] ?? "unknown";
     // this.commission = (snapshot.data["commission"]).toDouble();
-    this.razorAPIKey = snapshot.data()["razorAPIKey"] ?? "unknown";
+    this.razorAPIKey = snapshot.data()!["razorAPIKey"] ?? "unknown";
     this.storeTypes = [];
-    for (var i = 0; i < snapshot.data()["storeTypes"].length; i++) {
-      this.storeTypes?.add(StoreType.fromMap(snapshot.data()["storeTypes"][i]));
+    for (var i = 0; i < snapshot.data()!["storeTypes"].length; i++) {
+      this
+          .storeTypes
+          ?.add(StoreType.fromMap(snapshot.data()!["storeTypes"][i]));
     }
     // this.storeCategories = List<String>.from(snapshot.data["storeCategories"]);
     // print("admin meta data: $storeCategories");
-    this.reward = Reward.fromMap(snapshot.data()["reward"]);
+    this.reward = Reward.fromMap(snapshot.data()!["reward"]);
     this.social = [];
-    for (var i = 0; i < snapshot.data()["socialLinks"].length; i++) {
-      social?.add(SocialLinksAdmin.fromMap(snapshot.data()["socialLinks"][i]));
+    for (var i = 0; i < snapshot.data()!["socialLinks"].length; i++) {
+      social?.add(SocialLinksAdmin.fromMap(snapshot.data()!["socialLinks"][i]));
     }
     this.faq = [];
-    for (var i = 0; i < snapshot.data()["FAQ"].length; i++) {
-      faq?.add(FAQ.fromMap(snapshot.data()["FAQ"][i]));
+    for (var i = 0; i < snapshot.data()!["FAQ"].length; i++) {
+      faq?.add(FAQ.fromMap(snapshot.data()!["FAQ"][i]));
     }
-    this.superUser = List<String>.from(snapshot.data()["superUser"]);
-    this.user = List<String>.from(snapshot.data()["user"]);
+    this.superUser = List<String>.from(snapshot.data()!["superUser"]);
+    this.user = List<String>.from(snapshot.data()!["user"]);
     this.rateListCategory = Map<String, List<String>>();
     this.storeTypes?.forEach((category) {
       this.rateListCategory?.putIfAbsent(category.name!, () {
         return List<String>.from(
-            snapshot.data()["rateListCategory"][category.name] ?? []);
+            snapshot.data()!["rateListCategory"][category.name] ?? []);
       });
     });
-    this.customerCare = snapshot.data()["customerCare"];
+    this.customerCare = snapshot.data()!["customerCare"];
     this.commissionPercent =
-        (snapshot.data()["commissionPercent"] ?? 10).toDouble();
+        (snapshot.data()!["commissionPercent"] ?? 10).toDouble();
     assert(this.commissionPercent! >= 0 && this.commissionPercent! <= 100);
     this.fixedSubscriptionCommission =
-        (snapshot.data()["fixedSubscriptionCommission"] ?? 80).toDouble();
+        (snapshot.data()!["fixedSubscriptionCommission"] ?? 80).toDouble();
     // print("Admin data: ${this.toJson()}");
   }
 

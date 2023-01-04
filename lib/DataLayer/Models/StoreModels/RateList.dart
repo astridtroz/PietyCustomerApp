@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class RateList {
   String? rateListType;
@@ -19,20 +18,21 @@ class RateList {
     required this.rateListType,
   });
 
-  RateList.fromSnapshot(DocumentSnapshot snapshot) {
-    this.rateListType = snapshot.data()["rateListType"];
-    this.storeId = snapshot.data()["storeId"];
+  RateList.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    this.rateListType = snapshot.data()!["rateListType"];
+    this.storeId = snapshot.data()!["storeId"];
     this.categoryList = [];
-    if (snapshot.data()["categoryList"] != null &&
-        snapshot.data()["categoryList"].isNotEmpty) {
-      for (int i = 0; i < snapshot.data()["categoryList"].length; i++) {
-        categoryList?.add(snapshot.data()["categoryList"][i]);
+    if (snapshot.data()!["categoryList"] != null &&
+        snapshot.data()!["categoryList"].isNotEmpty) {
+      for (int i = 0; i < snapshot.data()!["categoryList"].length; i++) {
+        categoryList?.add(snapshot.data()!["categoryList"][i]);
       }
     }
     // print("category: $categoryList");
     this.rateListItem = [];
-    for (int i = 0; i < snapshot.data()["rateListItem"].length; i++) {
-      rateListItem?.add(RateListItem.fromMap(snapshot.data()["rateListItem"][i]));
+    for (int i = 0; i < snapshot.data()!["rateListItem"].length; i++) {
+      rateListItem
+          ?.add(RateListItem.fromMap(snapshot.data()!["rateListItem"][i]));
     }
 
     /// Initializing cumulative ratelist

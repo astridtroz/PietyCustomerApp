@@ -94,78 +94,79 @@ class Order {
     this.auditTrail,
   });
 
-  Order.fromSnapshot(DocumentSnapshot snapshot) {
+  Order.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     // Store related
     this.fcmStore =
-        List<String>.from(snapshot.data()["fcmStore"] ?? ["Not-available"]);
-    this.fcmUser = snapshot.data()["fcmUser"] ?? "Not-available";
-    this.storeType = snapshot.data()["storeType"];
-    this.storeName = snapshot.data()["storeName"];
-    this.storeId = snapshot.data()["storeId"];
-    this.storeAddress = StoreAddress.fromMap(snapshot.data()["storeAddress"]);
-    if (snapshot.data()["storeCoordinates"] != null &&
-        !snapshot.data()["storeCoordinates"].isEmpty) {
+        List<String>.from(snapshot.data()!["fcmStore"] ?? ["Not-available"]);
+    this.fcmUser = snapshot.data()!["fcmUser"] ?? "Not-available";
+    this.storeType = snapshot.data()!["storeType"];
+    this.storeName = snapshot.data()!["storeName"];
+    this.storeId = snapshot.data()!["storeId"];
+    this.storeAddress = StoreAddress.fromMap(snapshot.data()!["storeAddress"]);
+    if (snapshot.data()!["storeCoordinates"] != null &&
+        !snapshot.data()!["storeCoordinates"].isEmpty) {
       this.storeCoordinates =
-          LatLngExtended.fromMap(snapshot.data()["storeCoordinates"]);
+          LatLngExtended.fromMap(snapshot.data()!["storeCoordinates"]);
     }
     // this.storeCoordinates = LatLngExtended(
     //     (snapshot.data["storeCoordinates"]["lat"]).toDouble(),
     //     (snapshot.data["storeCoordinates"]["lng"]).toDouble());
     storePhoneNumber = [];
-    for (int i = 0; i < snapshot.data()["storePhoneNumber"].length; i++) {
+    for (int i = 0; i < snapshot.data()!["storePhoneNumber"].length; i++) {
       storePhoneNumber
-          ?.add(PhoneNumber.fromMap(snapshot.data()["storePhoneNumber"][i]));
+          ?.add(PhoneNumber.fromMap(snapshot.data()!["storePhoneNumber"][i]));
     }
-    if (snapshot.data()["storeReview"] != null &&
-        !snapshot.data()["storeReview"].isEmpty) {
-      this.storeReview = Review.fromJson(snapshot.data()["storeReview"]);
+    if (snapshot.data()!["storeReview"] != null &&
+        !snapshot.data()!["storeReview"].isEmpty) {
+      this.storeReview = Review.fromJson(snapshot.data()!["storeReview"]);
     }
-    this.storeType = snapshot.data()["storeType"];
+    this.storeType = snapshot.data()!["storeType"];
 
     // User related
-    if (snapshot.data()["userReview"] != null &&
-        !snapshot.data()["userReview"].isEmpty) {
-      this.userReview = Review.fromJson(snapshot.data()["userReview"]);
+    if (snapshot.data()!["userReview"] != null &&
+        !snapshot.data()!["userReview"].isEmpty) {
+      this.userReview = Review.fromJson(snapshot.data()!["userReview"]);
     }
-    this.userId = snapshot.data()["userId"];
+    this.userId = snapshot.data()!["userId"];
     this.userCoordinates =
-        LatLngExtended.fromMap(snapshot.data()["userCoordinates"]);
+        LatLngExtended.fromMap(snapshot.data()!["userCoordinates"]);
     // this.userCoordinates = LatLngExtended(
     //     (snapshot.data["userCoordinates"]["lat"]).toDouble(),
     //     (snapshot.data["userCoordinates"]["lng"]).toDouble());
-    this.userName = snapshot.data()["userName"];
-    this.userAddress = UserAddress.fromMap(snapshot.data()["userAddress"]);
+    this.userName = snapshot.data()!["userName"];
+    this.userAddress = UserAddress.fromMap(snapshot.data()!["userAddress"]);
     this.userPhoneNumber =
-        PhoneNumber.fromMap(snapshot.data()["userPhoneNumber"]);
+        PhoneNumber.fromMap(snapshot.data()!["userPhoneNumber"]);
 
     // Order related
-    this.orderId = snapshot.data()["orderId"];
-    this.orderPlacingDate = (snapshot.data()["orderPlacingDate"]).toDate();
-    this.orderStatus = String2Enum.getOrderStatus(snapshot.data()["orderStatus"]);
+    this.orderId = snapshot.data()!["orderId"];
+    this.orderPlacingDate = (snapshot.data()!["orderPlacingDate"]).toDate();
+    this.orderStatus =
+        String2Enum.getOrderStatus(snapshot.data()!["orderStatus"]);
     this.deliveryType =
-        String2Enum.getDeliveryType(snapshot.data()["deliveryType"]);
+        String2Enum.getDeliveryType(snapshot.data()!["deliveryType"]);
     this.deliveryMode =
-        String2Enum.getDeliveryMode(snapshot.data()["deliveryMode"]);
-    if (snapshot.data()["pickupDateTimeRequested"] != null &&
-        snapshot.data()["pickupDateTimeRequested"].toString().isNotEmpty) {
+        String2Enum.getDeliveryMode(snapshot.data()!["deliveryMode"]);
+    if (snapshot.data()!["pickupDateTimeRequested"] != null &&
+        snapshot.data()!["pickupDateTimeRequested"].toString().isNotEmpty) {
       this.pickupDateTimeRequested =
-          snapshot.data()["pickupDateTimeRequested"].toDate();
+          snapshot.data()!["pickupDateTimeRequested"].toDate();
     }
-    if (snapshot.data()["estimatedDeliveryDateTime"] != null &&
-        snapshot.data()["estimatedDeliveryDateTime"].toString().isNotEmpty) {
+    if (snapshot.data()!["estimatedDeliveryDateTime"] != null &&
+        snapshot.data()!["estimatedDeliveryDateTime"].toString().isNotEmpty) {
       this.pickupDateTimeRequested =
-          snapshot.data()["estimatedDeliveryDateTime"].toDate();
+          snapshot.data()!["estimatedDeliveryDateTime"].toDate();
     }
-    if (snapshot.data()["actualDeliveryDateTime"] != null &&
-        snapshot.data()["actualDeliveryDateTime"].toString().isNotEmpty) {
+    if (snapshot.data()!["actualDeliveryDateTime"] != null &&
+        snapshot.data()!["actualDeliveryDateTime"].toString().isNotEmpty) {
       this.pickupDateTimeRequested =
-          snapshot.data()["actualDeliveryDateTime"].toDate();
+          snapshot.data()!["actualDeliveryDateTime"].toDate();
     }
-    this.numberOfClothes = snapshot.data()["numberOfClothes"] ?? 0;
+    this.numberOfClothes = snapshot.data()!["numberOfClothes"] ?? 0;
     // if (snapshot.data["price"] != null && !snapshot.data["price"].isEmpty) {
     //   this.price = Price.fromMap(snapshot.data["price"]);
     // }
-    this.price = snapshot.data()["price"] == null
+    this.price = snapshot.data()!["price"] == null
         ? Price(
             servicesOpted: [],
             orderCharge: Map<String, double>(),
@@ -183,22 +184,23 @@ class Order {
               offer: 0,
               offerCode: "null",
             ))
-        : Price.fromMap(snapshot.data()["price"], this.services!);
+        : Price.fromMap(snapshot.data()!["price"], this.services!);
     auditTrail = [];
-    for (int i = 0; i < snapshot.data()["auditTrail"].length; i++) {
-      auditTrail?.add(Activity.fromMap(snapshot.data()["auditTrail"][i]));
+    for (int i = 0; i < snapshot.data()!["auditTrail"].length; i++) {
+      auditTrail?.add(Activity.fromMap(snapshot.data()!["auditTrail"][i]));
     }
     payments = [];
-    int _length =
-        snapshot.data()["payment"] == null ? 0 : snapshot.data()["payment"].length;
+    int _length = snapshot.data()!["payment"] == null
+        ? 0
+        : snapshot.data()!["payment"].length;
     for (int i = 0; i < _length; i++) {
-      payments?.add(Payment.fromMap(snapshot.data()["payment"][i]));
+      payments?.add(Payment.fromMap(snapshot.data()!["payment"][i]));
     }
     services = [];
-    if (snapshot.data()["services"] != null &&
-        !snapshot.data()["services"].isEmpty) {
-      for (int i = 0; i < snapshot.data()["services"].length; i++) {
-        services?.add(snapshot.data()["services"][i]);
+    if (snapshot.data()!["services"] != null &&
+        !snapshot.data()!["services"].isEmpty) {
+      for (int i = 0; i < snapshot.data()!["services"].length; i++) {
+        services?.add(snapshot.data()!["services"][i]);
       }
     }
 
