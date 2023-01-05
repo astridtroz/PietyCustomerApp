@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map_picker/flutter_map_picker.dart';
+// import 'package:flutter_map_picker/flutter_map_picker.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getwidget/components/button/gf_button.dart';
@@ -8,6 +8,7 @@ import 'package:getwidget/components/rating/gf_rating.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:getwidget/types/gf_button_type.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -41,6 +42,7 @@ setUserLocationIndex(int selectedAddress) async {
 class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
   UserBloc? _userBloc;
   StoreBloc? storeBloc;
+
   PlacePickerResult? _pickedLocation;
   var _isSelected = false;
   double rating = 3;
@@ -291,14 +293,33 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                 _pickedLocation = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PlacePickerScreen(
-                                      googlePlacesApiKey: Constants.mapsAPIkey,
-                                      initialPosition: LatLng(position.latitude,
-                                          position.longitude),
-                                      mainColor: Colors.blue[200],
-                                      mapStrings: MapPickerStrings.english(),
-                                      placeAutoCompleteLanguage: 'en',
-                                    ),
+                                    builder: (context) =>
+                                        FlutterLocationPicker(
+                                            initPosition: LatLong(position.latitude,position.longitude),
+                                            selectLocationButtonStyle: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.blue),
+                                            ),
+                                            selectLocationButtonText: 'Set Current Location',
+                                            initZoom: 11,
+                                            minZoomLevel: 5,
+                                            maxZoomLevel: 16,
+                                            trackMyPosition: true,
+                                            onError: (e) => print(e),
+                                            onPicked: (pickedData) {
+                                              print(pickedData.latLong.latitude);
+                                              print(pickedData.latLong.longitude);
+                                              print(pickedData.address);
+                                              print(pickedData.addressData['country']);
+                                            }),
+
+                                    //     PlacePickerScreen(
+                                    //   googlePlacesApiKey: Constants.mapsAPIkey,
+                                    //   initialPosition: LatLng(position.latitude,
+                                    //       position.longitude),
+                                    //   mainColor: Colors.blue[200],
+                                    //   mapStrings: MapPickerStrings.english(),
+                                    //   placeAutoCompleteLanguage: 'en',
+                                    // ),
                                   ),
                                 );
                                 if (_pickedLocation != null) {
