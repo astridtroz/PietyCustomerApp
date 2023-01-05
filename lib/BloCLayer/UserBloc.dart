@@ -153,7 +153,7 @@ class UserBloc extends Bloc {
             .collection("customers")
             .doc(event.user.uid)
             .get();
-        User2 newUser = User2.fromMap(user.data());
+        User2 newUser = User2.fromMap(user.data() as Map<String, dynamic>);
         _user = newUser;
         getUserSink.add(newUser);
       });
@@ -165,8 +165,6 @@ class UserBloc extends Bloc {
         placemarkFromCoordinates(position.latitude, position.longitude)
             .then((p) async {
           Placemark place = p[0];
-          print(
-              " ${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}");
           userPlace = place;
           _selectedUserAddress = UserAddress(
               addressType: AddressType.home,
@@ -211,7 +209,7 @@ class UserBloc extends Bloc {
               .snapshots()
               .listen((DocumentSnapshot snapshot) {
             _userAddressList = [];
-            User2 newUser = User2.fromMap(snapshot.data());
+            User2 newUser = User2.fromMap(snapshot.data() as Map<String, dynamic>);
             if (newUser.addresses == null && newUser.addresses!.isEmpty) {
               mapEventToState(GetUserLocation());
             } else {
@@ -388,8 +386,7 @@ class UserBloc extends Bloc {
     final PendingDynamicLinkData? data =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData dynamicLink) async {
       final Uri? deepLink = dynamicLink.link;
 
       if (deepLink != null) {
@@ -410,7 +407,7 @@ class UserBloc extends Bloc {
               .doc(referredByUserId)
               .get()
               .then((DocumentSnapshot snapshot) async {
-            tempUser = User2.fromMap(snapshot.data());
+            tempUser = User2.fromMap(snapshot.data() as Map<String, dynamic>);
             List<String> referredTo = tempUser.referredTo!;
             double pietyCoinsEarned =
                 double.parse(tempUser.pietyCoinsEarned!) ?? 0;
@@ -433,21 +430,74 @@ class UserBloc extends Bloc {
       } else {
         print("You are playing with fire sir");
       }
-    }, onError: (OnLinkErrorException e) async {
+    }).onError((e){
       print('onLinkError');
       print(e.message);
     });
+    // FirebaseDynamicLinks.instance.onLink(
+    //     onSuccess: (PendingDynamicLinkData dynamicLink) async {
+    //   final Uri? deepLink = dynamicLink.link;
+    //
+    //   if (deepLink != null) {
+    //     print('_handleDeepLink | deeplink: $deepLink');
+    //     String referredByUserId = deepLink.queryParameters["username"]!;
+    //     if (_user!.uid != referredByUserId && _user!.referredBy == null) {
+    //       _user!.referredBy = referredByUserId;
+    //       print("Referred By user Id : $referredByUserId");
+    //       await databaseReference
+    //           .collection("customers")
+    //           .doc(_user!.uid)
+    //           .update({"referredBy": _user!.referredBy}).then((onValue) {
+    //         print("Updated User is : ${_user.toString()}");
+    //       });
+    //       User2 tempUser;
+    //       await databaseReference
+    //           .collection('customers')
+    //           .doc(referredByUserId)
+    //           .get()
+    //           .then((DocumentSnapshot snapshot) async {
+    //         tempUser = User2.fromMap(snapshot.data() as Map<String, dynamic>);
+    //         List<String> referredTo = tempUser.referredTo!;
+    //         double pietyCoinsEarned =
+    //             double.parse(tempUser.pietyCoinsEarned!) ?? 0;
+    //         print("Data Fetched");
+    //         if (!referredTo.contains(_user!.uid)) {
+    //           await databaseReference
+    //               .collection('customers')
+    //               .doc(referredByUserId)
+    //               .set({
+    //             'referredTo': FieldValue.arrayUnion([_user!.uid]),
+    //             'pietyCoinsEarned': pietyCoinsEarned + 10,
+    //           }, SetOptions(merge: true)).then((onValue) {
+    //             print("User Referred Successfully");
+    //           });
+    //         }
+    //       });
+    //     } else {
+    //       print("You are in goddamn trouble");
+    //     }
+    //   } else {
+    //     print("You are playing with fire sir");
+    //   }
+    // }, onError: (OnLinkErrorException e) async {
+    //   print('onLinkError');
+    //   print(e.message);
+    // });
   }
 
   Future<Uri> createDynamicLink(String userId) async {
     final link = Uri.parse(
         "https://piety.page.link/?link=https://piety.page.link/inviteapp?username=$userId&apn=com.piety.piety");
     final ShortDynamicLink shortenedLink =
-        await DynamicLinkParameters.shortenUrl(
-      link,
-      DynamicLinkParametersOptions(
-          shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
-    );
+        await FirebaseDynamicLinks.instance.buildShortLink(
+          DynamicLinkParameters(link: link, uriPrefix: 'https://piety.page.link',)
+        );
+
+    //     DynamicLinkParameters.shortenUrl(
+    //   link,
+    //   DynamicLinkParametersOptions(
+    //       shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
+    // );
     return shortenedLink.shortUrl;
   }
 

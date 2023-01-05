@@ -43,7 +43,8 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
   UserBloc? _userBloc;
   StoreBloc? storeBloc;
 
-  PlacePickerResult? _pickedLocation;
+  // PlacePickerResult? _pickedLocation;
+  LatLng? _pickedLocation;
   var _isSelected = false;
   double rating = 3;
   int selectedAddress = 0;
@@ -328,7 +329,9 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                   // _userBloc.mapEventToState(
                                   //     SelectUserAddress(index: ));
                                   _userBloc!.mapEventToState(AddAddressByLatLng(
-                                      latLng: _pickedLocation!.latLng));
+                                      latLng: _pickedLocation!
+                                          // .latLng
+                                  ));
                                 }
                                 setState(() {
                                   // print(_isSelected);

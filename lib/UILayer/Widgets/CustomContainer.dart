@@ -4,6 +4,8 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:geocoder2/geocoder2.dart';
+import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
 
 import '/BloCLayer/UserBloc.dart';
 import '/DataLayer/Models/Other/LatLngExtended.dart';
@@ -35,9 +37,11 @@ class CustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserBloc _userBloc = BlocProvider.of<UserBloc>(context);
-    return StreamBuilder<Placemark>(
-        stream: _userBloc.positionStream,
-        initialData: _userBloc.getUserPlace,
+    return StreamBuilder<UserAddress>(
+        // stream: _userBloc.positionStream,
+        // initialData: _userBloc.getUserPlace,
+        stream: _userBloc.selectedAddressStream,
+        initialData: _userBloc.getSelectedUserAddress,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.hasError) {
@@ -201,4 +205,5 @@ class CustomContainer extends StatelessWidget {
           }
         });
   }
+
 }

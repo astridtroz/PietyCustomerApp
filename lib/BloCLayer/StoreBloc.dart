@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
 import 'package:sembast/sembast.dart';
 
 import '/BloCLayer/AdminBloc.dart';
@@ -229,15 +231,23 @@ class StoreBloc extends Bloc {
     } else if (event is InitialData) {
       print("InitialData Called");
       if (event.currentPosition != null) {
-        Position currentPosition = event.currentPosition.position;
+        // Position currentPosition = event.currentPosition.position;
+        Placemark place = event.currentPosition;
+        String address = "${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+
+        List<Location> location = await locationFromAddress(address);
+        var latx = location[0];
+        var longx = location[1];
 
         List<Store> stores = [];
         if (getSelectedStore != null) {
           getSelectedStore.forEach((store) {
             Store intermediateStore = store;
             num distanceInMeters = distance(
-                LatLng(currentPosition.latitude.toDouble(),
-                    currentPosition.longitude),
+                LatLng(latx.latitude,
+                    latx.longitude),
+                // LatLng(currentPosition.latitude.toDouble(),
+                //     currentPosition.longitude),
                 LatLng(intermediateStore.storeCoordinates?.latitude,
                     intermediateStore.storeCoordinates?.longitude));
 
@@ -258,7 +268,9 @@ class StoreBloc extends Bloc {
       }
     } else if (event is GetStoresOfType) {
       print("GETSTOREOFTYPE");
-      Position currentPosition = event.currentPosition.position;
+      // Position currentPosition = event.currentPosition.position;
+      List<Location> location = await locationFromAddress(event.currentPosition.locality.toString());
+      var latx = location[0];
       // print(
       //     "LatLng is : ${currentPosition.latitude}+${currentPosition.longitude}");
 
@@ -266,7 +278,8 @@ class StoreBloc extends Bloc {
       _allStores.forEach((store) {
         Store intermediateStore = store;
         num distanceInMeters = distance(
-            LatLng(currentPosition.latitude, currentPosition.longitude),
+            LatLng(latx.latitude, latx.longitude),
+            // LatLng(currentPosition.latitude, currentPosition.longitude),
             LatLng(intermediateStore.storeCoordinates?.latitude,
                 intermediateStore.storeCoordinates?.longitude));
         // print("interStore Distance::: " +
@@ -328,10 +341,10 @@ class StoreBloc extends Bloc {
         _allServices = [];
         _addOnServices = [];
         _categoryRateList = [];
-        _singleStoreRateList = RateList.fromSnapshot(snapshot.docs[0]);
+        _singleStoreRateList = RateList.fromSnapshot(snapshot.docs[0] as QueryDocumentSnapshot<Map<String, dynamic>>);
         //print("Rate List length is : ${snapshot.docs.length}");
         if (snapshot.docs != null && snapshot.docs.isNotEmpty) {
-          RateList loaded = RateList.fromSnapshot(snapshot.docs.first);
+          RateList loaded = RateList.fromSnapshot(snapshot.docs.first as QueryDocumentSnapshot<Map<String, dynamic>>);
           _initialRateList = loaded;
           print("LOADED::" + loaded.toString());
           for (int i = 0; i < loaded.categoryList!.length; i++) {
@@ -351,7 +364,7 @@ class StoreBloc extends Bloc {
           allServicesSink.add(_allServices);
           addOnServicesSink.add(_addOnServices);
 
-          singleRateListSink.add(RateList.fromSnapshot(snapshot.docs.first));
+          singleRateListSink.add(RateList.fromSnapshot(snapshot.docs.first as QueryDocumentSnapshot<Map<String, dynamic>>));
         } else {
           singleRateListSink.addError("Unable to Fetch Rate List");
         }

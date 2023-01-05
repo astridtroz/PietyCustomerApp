@@ -51,6 +51,7 @@ dependencies:
   fluttertoast: ^8.1.2
   font_awesome_flutter: ^10.3.0
   generic_bloc_provider: ^2.1.1
+  geocoder2: ^1.4.0
   geocoding: ^2.0.5
   geolocator: ^9.0.2
   getwidget: ^3.0.1

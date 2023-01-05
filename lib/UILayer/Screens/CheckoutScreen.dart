@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:geocoding/geocoding.dart';
 
 import '/BloCLayer/UserEvent.dart';
 import '/DataLayer/Models/OrderModels/Activity.dart';
@@ -629,9 +630,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     msg: "Please Fill All Mandatory Fileds",
                                     toastLength: Toast.LENGTH_SHORT);
                               }
-                            : () {
+                            : () async {
                                 Order newOrder;
                                 if (_store!.storeType == "Laundry") {
+
+                                  List<Location> location = await locationFromAddress(_userBloc!.getSelectedUserAddress.toString());
+                                  var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
                                       city: _userBloc!
                                           .getSelectedUserAddress.city,
@@ -677,8 +681,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ? DeliveryMode.homeDelivery
                                         : DeliveryMode.selfPickup,
                                     userCoordinates: LatLngExtended(
-                                      _userBloc!.userPlace!.position.latitude,
-                                      _userBloc!.userPlace!.position.longitude,
+                                      latx.latitude,latx.longitude
+                                      // _userBloc!.userPlace!.position.latitude,
+                                      // _userBloc!.userPlace!.position.longitude,
                                     ),
                                     userName: _user!.name,
                                     userAddress: orderAddress,
@@ -707,6 +712,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   _orderBloc!.mapEventToState(
                                       CreateOrder(order: newOrder));
                                 } else {
+                                  List<Location> location = await locationFromAddress(_userBloc!.getSelectedUserAddress.toString());
+                                  var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
                                       city: _userBloc!
                                           .getSelectedUserAddress.city,
@@ -746,8 +753,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     pickupDateTimeRequested:
                                         _pickUpDateTimeRequested!,
                                     userCoordinates: LatLngExtended(
-                                      _userBloc!.userPlace!.position.latitude,
-                                      _userBloc!.userPlace!.position.longitude,
+                                      latx.latitude,latx.longitude
+                                      // _userBloc!.userPlace!.position.latitude,
+                                      // _userBloc!.userPlace!.position.longitude,
                                     ),
                                     userName: _user!.name,
                                     userAddress: orderAddress,

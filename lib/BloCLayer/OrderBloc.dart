@@ -114,7 +114,7 @@ class OrderBloc extends Bloc {
         List<Order> _awaitingOrder =
             []; // [] putted at the place of List<Order>(_length) while making it runnable
         for (int i = 0; i < _length; i++) {
-          _awaitingOrder[i] = Order.fromSnapshot(snapshot.docs[i]);
+          _awaitingOrder[i] = Order.fromSnapshot(snapshot.docs[i] as cloud.QueryDocumentSnapshot<Map<String, dynamic>>);
         }
         _awaitingOrderSink.add(_awaitingOrder);
       });
@@ -130,7 +130,7 @@ class OrderBloc extends Bloc {
           .listen((cloud.QuerySnapshot snapshot) {
         _currentOrders = [];
         for (int i = 0; i < snapshot.docs.length; i++) {
-          _currentOrders.add(Order.fromSnapshot(snapshot.docs[i]));
+          _currentOrders.add(Order.fromSnapshot(snapshot.docs[i] as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
         }
         _currentOrderSink.add(_currentOrders);
         // List<Order> _currentOrder = List<Order>(_length);
@@ -151,7 +151,7 @@ class OrderBloc extends Bloc {
         print("L = $_length");
         _pastOrders = [];
         for (int i = 0; i < snapshot.docs.length; i++) {
-          _pastOrders.add(Order.fromSnapshot(snapshot.docs[i]));
+          _pastOrders.add(Order.fromSnapshot(snapshot.docs[i] as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
         }
         pastOrderListSink.add(_pastOrders);
         // List<Order> _pastOrders = List<Order>(_length);
