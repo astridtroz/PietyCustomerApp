@@ -285,7 +285,7 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                               label: Text("Add Another location",
                                   style: TextStyle(fontSize: 15.0)),
                               onPressed: () async {
-                                Position position = await Geolocator()
+                                Position position = await Geolocator
                                     .getCurrentPosition(
                                         desiredAccuracy: LocationAccuracy.high);
                                 _pickedLocation = await Navigator.push(
@@ -722,7 +722,7 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                                 (context, url, error) =>
                                                     Text("Error Loading"),
                                           )
-                                        : null,
+                                        : CachedNetworkImage(imageUrl: ''),
                                   ),
                                 );
                               },

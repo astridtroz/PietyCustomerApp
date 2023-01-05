@@ -73,15 +73,22 @@ class NotificationHandler {
   void _initialize() async {
     await notification!.initialize(
       initializationSettings!,
-      onSelectNotification: _onSelectNotification,
+      onDidReceiveNotificationResponse: _onSelectNotification,
+      // onSelectNotification: _onSelectNotification,
     );
   }
 
-  Future _onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
+  void _onSelectNotification(NotificationResponse response) async {
+    if (response != null) {
+      debugPrint('notification payload: ' + response.toString());
     }
   }
+
+  // Future _onSelectNotification(String payload) async {
+  //   if (payload != null) {
+  //     debugPrint('notification payload: ' + payload);
+  //   }
+  // }
 
   void _onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) async {
