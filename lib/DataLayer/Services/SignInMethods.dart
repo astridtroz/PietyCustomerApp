@@ -11,12 +11,12 @@ import '/DataLayer/Models/UserModels/User.dart';
 import '/const.dart';
 
 class SignInMethods {
-  static String? _phoneVerificationID;
+  static late String _phoneVerificationID;
 
   static Future<void> autoVerifyPhone({
-    @required String? countryCode,
-    @required String? phoneNumber,
-    @required UserBloc? userBloc,
+    required String? countryCode,
+    required String? phoneNumber,
+    required UserBloc? userBloc,
   }) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     print("Phone: ${countryCode! + phoneNumber!}");
@@ -90,13 +90,13 @@ class SignInMethods {
   }
 
   static Future<void> phoneWithOTP({
-    required String otp,
-    required UserBloc userBloc,
+    required String? otp,
+    required UserBloc? userBloc,
   }) async {
     try {
       AuthCredential authCredentials = PhoneAuthProvider.credential(
         verificationId: _phoneVerificationID!,
-        smsCode: otp,
+        smsCode: otp!,
       );
       UserCredential res =
           await FirebaseAuth.instance.signInWithCredential(authCredentials);
@@ -109,7 +109,7 @@ class SignInMethods {
         // print("retured value::::" + value.exists.toString());
         if (!value.exists) {
           //print("You are a new User");
-          userBloc.mapEventToState(
+          userBloc!.mapEventToState(
             AddUserDetails(
               user: User2(
                 uid: res.user?.uid,
@@ -134,7 +134,7 @@ class SignInMethods {
           userBloc.initDynamicLinks();
         } else {
           //print("Exising User");
-          userBloc.mapEventToState(GetUserDetails());
+          userBloc!.mapEventToState(GetUserDetails());
         }
       });
     } on PlatformException catch (e) {

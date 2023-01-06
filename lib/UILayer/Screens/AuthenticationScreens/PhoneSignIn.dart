@@ -11,8 +11,8 @@ class PhoneSignIn extends StatefulWidget {
 }
 
 class _PhoneSignInState extends State<PhoneSignIn> {
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _otpController = TextEditingController();
+  TextEditingController? _phoneNumberController = TextEditingController();
+  TextEditingController? _otpController = TextEditingController();
   int? index;
   final String _countryCode = "+91";
   GlobalKey<FormState> _phoneFormKey = GlobalKey<FormState>();
@@ -67,14 +67,17 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Expanded(
-                                      child: TextFormField(
+                                      child:
+
+                                      TextFormField(
                                         autofocus: true,
                                         focusNode: _phoneFocus,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
                                         controller: _phoneNumberController,
                                         maxLength: 10,
                                         keyboardType: TextInputType.phone,
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.deny(
+                                          FilteringTextInputFormatter.allow(
                                               RegExp("[0-9]")),
                                         ],
                                         validator: (value) {
@@ -97,7 +100,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                               userBloc: userBloc,
                                               countryCode: _countryCode,
                                               phoneNumber:
-                                                  _phoneNumberController.text,
+                                                  _phoneNumberController?.text,
                                             ).then((_) {
                                               FocusScope.of(context)
                                                   .requestFocus(_otpFocus);
@@ -124,7 +127,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                               userBloc: userBloc,
                                               countryCode: _countryCode,
                                               phoneNumber:
-                                                  _phoneNumberController.text,
+                                                  _phoneNumberController?.text,
                                             );
                                             setState(() {
                                               index = 1;
@@ -157,7 +160,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                         maxLength: 6,
                                         keyboardType: TextInputType.number,
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.deny(
+                                          FilteringTextInputFormatter.allow(
                                               RegExp("[0-9]")),
                                         ],
                                         validator: (value) {
@@ -174,7 +177,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                               .validate()) {
                                             SignInMethods.phoneWithOTP(
                                               userBloc: userBloc,
-                                              otp: _otpController.text,
+                                              otp: _otpController?.text,
                                             );
                                           }
                                         },
@@ -196,7 +199,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                               .validate()) {
                                             SignInMethods.phoneWithOTP(
                                               userBloc: userBloc,
-                                              otp: _otpController.text,
+                                              otp: _otpController?.text,
                                             );
                                           }
                                         },
