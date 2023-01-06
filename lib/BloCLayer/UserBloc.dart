@@ -59,6 +59,9 @@ class UserBloc extends Bloc {
   Placemark? userPlace;
   Placemark get getUserPlace => this.userPlace!;
 
+  Location? _selectedUserLocationAddress;
+  Location get getSelectedUserLocationAddress => _selectedUserLocationAddress!;
+
   UserAddress? _selectedUserAddress;
   UserAddress get getSelectedUserAddress => _selectedUserAddress!;
   List<UserAddress>? _userAddressList;
@@ -94,6 +97,13 @@ class UserBloc extends Bloc {
       _selectedAddressController.sink;
   Stream<UserAddress> get selectedAddressStream =>
       _selectedAddressController.stream;
+
+  StreamController<Location> _selectedAddressLocationController =
+  StreamController<Location>.broadcast();
+  StreamSink<Location> get selectedAddressLocationSink =>
+      _selectedAddressLocationController.sink;
+  Stream<Location> get selectedAddressLocationStream =>
+      _selectedAddressLocationController.stream;
 
   StreamController<List<UserAddress>> _allAddressController =
       StreamController<List<UserAddress>>.broadcast();
@@ -176,6 +186,9 @@ class UserBloc extends Bloc {
               postalCode: place.postalCode);
           selectedAddressSink.add(_selectedUserAddress!);
           positionSink.add(place);
+          List<Location> l = await locationFromAddress(_selectedUserAddress!.toString());
+          var latx = l[0];
+          selectedAddressLocationSink.add(latx);
 
           getUserStream.listen((myUser) async {
             List<UserAddress> currentAddresses = myUser.addresses ?? [];
@@ -324,6 +337,9 @@ class UserBloc extends Bloc {
         firstLocation.longitude,
       );
       selectedAddressSink.add(_user!.addresses![event.index]);
+      List<Location> l1 = await locationFromAddress(_user!.addresses![event.index].toString());
+      var latx1 = l1[0];
+      selectedAddressLocationSink.add(latx1);
       userPlace = place[0];
       positionSink.add(place[0]);
       Fluttertoast.showToast(msg: "Location Changed");
@@ -346,6 +362,9 @@ class UserBloc extends Bloc {
       );
       selectedAddressSink.add(_selectedUserAddress!);
       positionSink.add(place);
+      List<Location> l2 = await locationFromAddress(_selectedUserAddress.toString());
+      var latx2 = l2[0];
+      selectedAddressLocationSink.add(latx2);
       List<UserAddress> currentAddresses = _user!.addresses ?? [];
       if (!_user!.addresses!.contains(_selectedUserAddress)) {
         currentAddresses.removeWhere((e) => e.addressType == AddressType.other);

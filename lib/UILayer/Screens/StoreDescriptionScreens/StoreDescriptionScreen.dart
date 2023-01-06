@@ -8,7 +8,7 @@ import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:search_widget/search_widget.dart';
+import 'package:search_choices/search_choices.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '/BloCLayer/OrderBloc.dart';
@@ -1447,72 +1447,99 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen>
         });
   }
 
-  SearchWidget<String> buildSearchWidget(
-      List<RateListItem> fetchedList, BuildContext context) {
-    return SearchWidget<String>(
-      dataList: () {
-        List<String> services;
-        services = fetchedList.map((item) => item.serviceName!).toList();
-        services.add("All");
-        return services;
-      }(),
-      hideSearchBoxWhenItemSelected: false,
-      listContainerHeight: MediaQuery.of(context).size.height / 4,
-      queryBuilder: (String query, List<String> list) {
-        return list
-            .where((String item) =>
-                item.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      },
-      popupListItemBuilder: (String item) {
-        return PopupListItemWidget(item);
-      },
-      selectedItemBuilder:
-          (String selectedItem, VoidCallback deleteSelectedItem) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          setState(() {
-            _searchField = selectedItem;
-            // _selectedText
-            //     .clear();
-          });
+  List<DropdownMenuItem<String>>? items = [];
+
+  Widget buildSearchWidget(List<RateListItem> fetchedList, BuildContext context){
+    List<String> services;
+    services = fetchedList.map((item) => item.serviceName!).toList();
+    services.add("All");
+
+    services.forEach((wordPair) {
+      String s = '$wordPair';
+      items?.add(DropdownMenuItem(
+        value: s,
+        child: Text(s),
+      ));
+    });
+    return SearchChoices<String>.single(
+      items: items,
+      hint: "Search here...",
+      searchHint: "Search here...",
+      onChanged: (value) {
+        setState(() {
+          _searchField = value;
         });
-        print(selectedItem);
-        return null;
       },
-      // widget customization
-      noItemsFoundWidget: NoItemsFound(),
-      textFieldBuilder:
-          (TextEditingController controller, FocusNode focusNode) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-            decoration: InputDecoration(
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Color(0x4437474F),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).primaryColor),
-              ),
-              suffixIcon: Icon(Icons.search),
-              border: InputBorder.none,
-              hintText: "Search here...",
-              contentPadding: const EdgeInsets.only(
-                left: 16,
-                right: 20,
-                top: 14,
-                bottom: 14,
-              ),
-            ),
-          ),
-        );
-      },
+      isExpanded: true,
     );
   }
+
+  // SearchWidget<String> buildSearchWidget(
+  //     List<RateListItem> fetchedList, BuildContext context) {
+  //   return SearchWidget<String>(
+  //     dataList: () {
+  //       List<String> services;
+  //       services = fetchedList.map((item) => item.serviceName!).toList();
+  //       services.add("All");
+  //       return services;
+  //     }(),
+  //     hideSearchBoxWhenItemSelected: false,
+  //     listContainerHeight: MediaQuery.of(context).size.height / 4,
+  //     queryBuilder: (String query, List<String> list) {
+  //       return list
+  //           .where((String item) =>
+  //               item.toLowerCase().contains(query.toLowerCase()))
+  //           .toList();
+  //     },
+  //     popupListItemBuilder: (String item) {
+  //       return PopupListItemWidget(item);
+  //     },
+  //     selectedItemBuilder:
+  //         (String selectedItem, VoidCallback deleteSelectedItem) {
+  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+  //         setState(() {
+  //           _searchField = selectedItem;
+  //           // _selectedText
+  //           //     .clear();
+  //         });
+  //       });
+  //       print(selectedItem);
+  //       return null;
+  //     },
+  //     // widget customization
+  //     noItemsFoundWidget: NoItemsFound(),
+  //     textFieldBuilder:
+  //         (TextEditingController controller, FocusNode focusNode) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+  //         child: TextField(
+  //           controller: controller,
+  //           focusNode: focusNode,
+  //           style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+  //           decoration: InputDecoration(
+  //             enabledBorder: const OutlineInputBorder(
+  //               borderSide: BorderSide(
+  //                 color: Color(0x4437474F),
+  //               ),
+  //             ),
+  //             focusedBorder: OutlineInputBorder(
+  //               borderSide: BorderSide(color: Theme.of(context).primaryColor),
+  //             ),
+  //             suffixIcon: Icon(Icons.search),
+  //             border: InputBorder.none,
+  //             hintText: "Search here...",
+  //             contentPadding: const EdgeInsets.only(
+  //               left: 16,
+  //               right: 20,
+  //               top: 14,
+  //               bottom: 14,
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   // SliverAppBar buildStoreDescriptionAppBar(StoreBloc storeBloc) {
   //   return SliverAppBar(

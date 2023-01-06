@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlng/latlng.dart';
 import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
 import 'package:sembast/sembast.dart';
 
@@ -156,7 +156,7 @@ class StoreBloc extends Bloc {
   Stream<List<Store>> get featuredOfferStoreOfferListStream =>
       _featuredOfferStoreController.stream;
 
-  final Distance distance = new Distance();
+  // final Distance distance = new Distance();
 
   StoreBloc.initialize() {
     mapEventToState(FetchLocalDB());
@@ -243,13 +243,18 @@ class StoreBloc extends Bloc {
         if (getSelectedStore != null) {
           getSelectedStore.forEach((store) {
             Store intermediateStore = store;
-            num distanceInMeters = distance(
-                LatLng(latx.latitude,
-                    latx.longitude),
-                // LatLng(currentPosition.latitude.toDouble(),
-                //     currentPosition.longitude),
-                LatLng(intermediateStore.storeCoordinates?.latitude,
-                    intermediateStore.storeCoordinates?.longitude));
+            // num distanceInMeters = distance(
+            //     LatLng(latx.latitude,
+            //         latx.longitude),
+            //     // LatLng(currentPosition.latitude.toDouble(),
+            //     //     currentPosition.longitude),
+            //     LatLng(intermediateStore.storeCoordinates!.latitude,
+            //         intermediateStore.storeCoordinates!.longitude));
+            num distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
+                latx.latitude,
+                latx.longitude,
+                intermediateStore.storeCoordinates!.latitude,
+                intermediateStore.storeCoordinates!.longitude);
 
             if (distanceInMeters <
                 KmToMeter.getMeterFromKM(
@@ -277,11 +282,11 @@ class StoreBloc extends Bloc {
       List<Store> stores = [];
       _allStores.forEach((store) {
         Store intermediateStore = store;
-        num distanceInMeters = distance(
-            LatLng(latx.latitude, latx.longitude),
+        num distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
+            latx.latitude, latx.longitude,
             // LatLng(currentPosition.latitude, currentPosition.longitude),
-            LatLng(intermediateStore.storeCoordinates?.latitude,
-                intermediateStore.storeCoordinates?.longitude));
+            intermediateStore.storeCoordinates!.latitude,
+                intermediateStore.storeCoordinates!.longitude);
         // print("interStore Distance::: " +
         //     intermediateStore.name +
         //     " Allowed Dist:::: " +

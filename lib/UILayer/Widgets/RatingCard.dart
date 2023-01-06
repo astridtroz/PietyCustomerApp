@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 import '/BloCLayer/OrderBloc.dart';
 import '/BloCLayer/OrderEvent.dart';
 import '/DataLayer/Models/OrderModels/Activity.dart';
@@ -8,7 +9,6 @@ import '/DataLayer/Models/OrderModels/Order.dart';
 import '/DataLayer/Models/OrderModels/Review.dart';
 import '/UILayer/Widgets/GenericMaterialButton.dart';
 import '/const.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class RatingCard extends StatefulWidget {
   final Order order;
@@ -63,7 +63,7 @@ class _RatingCardState extends State<RatingCard> {
             starCount: 5,
             spacing: 8,
             borderColor: Colors.grey,
-            onRated: (double rating) {
+            onRatingChanged: (double rating) {
               setState(() {
                 this._rating = rating.toInt();
               });

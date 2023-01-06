@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlng/latlng.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
 
@@ -32,16 +32,16 @@ class CustomContainer extends StatelessWidget {
     required this.image,
   }) : super(key: key);
 
-  final Distance distance = new Distance();
+  // final Distance distance = new Distance();
 
   @override
   Widget build(BuildContext context) {
     UserBloc _userBloc = BlocProvider.of<UserBloc>(context);
-    return StreamBuilder<UserAddress>(
+    return StreamBuilder<Location>(
         // stream: _userBloc.positionStream,
         // initialData: _userBloc.getUserPlace,
-        stream: _userBloc.selectedAddressStream,
-        initialData: _userBloc.getSelectedUserAddress,
+        stream: _userBloc.selectedAddressLocationStream,
+        initialData: _userBloc.getSelectedUserLocationAddress,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.hasError) {
@@ -49,10 +49,10 @@ class CustomContainer extends StatelessWidget {
                 child: Text("Something went Wrong"),
               );
             } else {
-              double distanceInMeters = distance(
-                LatLng(snapshot.data?.position.latitude,
-                    snapshot.data?.position.longitude),
-                LatLng(storeLocation.latitude, storeLocation.longitude),
+              double distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
+                snapshot.data!.latitude,
+                    snapshot.data!.longitude,
+                storeLocation.latitude, storeLocation.longitude,
               ).toDouble();
               return Container(
                 //height: 120,

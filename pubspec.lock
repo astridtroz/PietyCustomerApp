@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.12"
-  ansicolor:
-    dependency: transitive
-    description:
-      name: ansicolor
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
   args:
     dependency: transitive
     description:
@@ -77,14 +70,14 @@ packages:
       name: charts_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.0"
+    version: "0.12.0"
   charts_flutter:
     dependency: "direct main"
     description:
       name: charts_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.0"
+    version: "0.12.0"
   clock:
     dependency: transitive
     description:
@@ -148,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  console_log_handler:
-    dependency: transitive
-    description:
-      name: console_log_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.6"
   crypto:
     dependency: transitive
     description:
@@ -226,7 +212,7 @@ packages:
     source: hosted
     version: "5.2.4"
   firebase_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
@@ -328,13 +314,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.7.0"
-  flutter_keyboard_visibility:
-    dependency: transitive
-    description:
-      name: flutter_keyboard_visibility
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -562,13 +541,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
-  latlong:
+  latlng:
     dependency: "direct main"
     description:
-      name: latlong
+      name: latlng
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.1"
+    version: "0.2.0"
   latlong2:
     dependency: transitive
     description:
@@ -598,12 +577,12 @@ packages:
     source: hosted
     version: "1.1.5"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.4"
+    version: "1.1.0"
   matcher:
     dependency: transitive
     description:
@@ -835,13 +814,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.7"
-  search_widget:
+  search_choices:
     dependency: "direct main"
     description:
-      name: search_widget
+      name: search_choices
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "2.2.1"
+  searchfield:
+    dependency: "direct main"
+    description:
+      name: searchfield
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.2"
   sembast:
     dependency: "direct main"
     description:
@@ -917,13 +903,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  smooth_star_rating:
+  smooth_star_rating_null_safety:
     dependency: "direct main"
     description:
-      name: smooth_star_rating
+      name: smooth_star_rating_null_safety
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.0.4+2"
   source_span:
     dependency: transitive
     description:
@@ -1085,13 +1071,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.7"
-  validate:
-    dependency: transitive
-    description:
-      name: validate
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.0"
   vector_math:
     dependency: transitive
     description:
