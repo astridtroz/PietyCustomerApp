@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>282805273447-03nc73mpp49f0j4i8b8tmgrqeah90chn.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.282805273447-03nc73mpp49f0j4i8b8tmgrqeah90chn</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>282805273447-03ijur9nirat8ikmchcqfsjqkrv6inkm.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDOlA1JtZgLI4hm7-KL27SdofmL6fLEm5Y</string>
+	<key>GCM_SENDER_ID</key>
+	<string>282805273447</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.pietycustomer</string>
+	<key>PROJECT_ID</key>
+	<string>mypiety-9a56c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mypiety-9a56c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:282805273447:ios:95dd9cfaadd1f34215e5c2</string>
+	<key>DATABASE_URL</key>
+	<string>https://mypiety-9a56c.firebaseio.com</string>
+</dict>
+</plist>
