@@ -42,7 +42,7 @@ class Store {
   List<String>? myGallery;
   double? minOrderServiceCharge;
 //  List<Branch> branch;
-  RatelistType? ratelistType;
+  RatelistType ratelistType = RatelistType.withCategory;
 
   ///if true store allow us to feature there
   ///offers on homepage
@@ -81,13 +81,13 @@ class Store {
     this.normalDeliveryTime,
     this.selfDeliveryDistance,
     this.taxRate,
-    @required this.storeCoordinates,
-    @required this.managers,
-    @required this.storeLogo,
-    @required this.myGallery,
+    required this.storeCoordinates,
+    required this.managers,
+    required this.storeLogo,
+    required this.myGallery,
     this.minOrderServiceCharge,
     this.featureOffer,
-    @required this.ratelistType,
+    required this.ratelistType,
   });
 
   Store.fromMap(Map<String, dynamic> data) {
@@ -203,7 +203,7 @@ class Store {
       "selfDeliveryDistance": this.selfDeliveryDistance,
       "taxRate": this.taxRate,
       "managers": List<dynamic>.from(this.managers!),
-      "ratelistType": Enum2String.getRatelistType(this.ratelistType!),
+      "ratelistType": Enum2String.getRatelistType(this.ratelistType),
       // "myGallery": List<String>.from(this.myGallery),
     };
   }

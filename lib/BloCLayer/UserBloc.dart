@@ -99,7 +99,7 @@ class UserBloc extends Bloc {
       _selectedAddressController.stream;
 
   StreamController<Location> _selectedAddressLocationController =
-  StreamController<Location>.broadcast();
+      StreamController<Location>.broadcast();
   StreamSink<Location> get selectedAddressLocationSink =>
       _selectedAddressLocationController.sink;
   Stream<Location> get selectedAddressLocationStream =>
@@ -169,8 +169,7 @@ class UserBloc extends Bloc {
       });
     } else if (event is GetUserLocation) {
       print("Event is ${event.toString()}");
-      Geolocator
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
           .then((Position position) {
         placemarkFromCoordinates(position.latitude, position.longitude)
             .then((p) async {
@@ -186,7 +185,8 @@ class UserBloc extends Bloc {
               postalCode: place.postalCode);
           selectedAddressSink.add(_selectedUserAddress!);
           positionSink.add(place);
-          List<Location> l = await locationFromAddress(_selectedUserAddress!.toString());
+          List<Location> l =
+              await locationFromAddress(_selectedUserAddress!.toString());
           var latx = l[0];
           selectedAddressLocationSink.add(latx);
 
@@ -222,7 +222,8 @@ class UserBloc extends Bloc {
               .snapshots()
               .listen((DocumentSnapshot snapshot) {
             _userAddressList = [];
-            User2 newUser = User2.fromMap(snapshot.data() as Map<String, dynamic>);
+            User2 newUser =
+                User2.fromMap(snapshot.data() as Map<String, dynamic>);
             if (newUser.addresses == null && newUser.addresses!.isEmpty) {
               mapEventToState(GetUserLocation());
             } else {
@@ -323,11 +324,12 @@ class UserBloc extends Bloc {
       // index = event.index;
       ///TODO @narayan i think you forget to check for null address here if its null
       ///then use current location
+      ///
+
       _selectedUserAddress = _user!.addresses![event.index];
       print("selectedAddress:: " + _selectedUserAddress!.displayAddress());
       final List<Location> locations = await locationFromAddress(
-          _user!.addresses![event.index].displayAddress()
-      );
+          _user!.addresses![event.index].displayAddress());
       if (locations == null || locations.isEmpty) {
         return;
       }
@@ -337,7 +339,8 @@ class UserBloc extends Bloc {
         firstLocation.longitude,
       );
       selectedAddressSink.add(_user!.addresses![event.index]);
-      List<Location> l1 = await locationFromAddress(_user!.addresses![event.index].toString());
+      List<Location> l1 =
+          await locationFromAddress(_user!.addresses![event.index].toString());
       var latx1 = l1[0];
       selectedAddressLocationSink.add(latx1);
       userPlace = place[0];
@@ -362,7 +365,8 @@ class UserBloc extends Bloc {
       );
       selectedAddressSink.add(_selectedUserAddress!);
       positionSink.add(place);
-      List<Location> l2 = await locationFromAddress(_selectedUserAddress.toString());
+      List<Location> l2 =
+          await locationFromAddress(_selectedUserAddress.toString());
       var latx2 = l2[0];
       selectedAddressLocationSink.add(latx2);
       List<UserAddress> currentAddresses = _user!.addresses ?? [];
@@ -405,7 +409,8 @@ class UserBloc extends Bloc {
     final PendingDynamicLinkData? data =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
-    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData dynamicLink) async {
+    FirebaseDynamicLinks.instance.onLink
+        .listen((PendingDynamicLinkData dynamicLink) async {
       final Uri? deepLink = dynamicLink.link;
 
       if (deepLink != null) {
@@ -449,7 +454,7 @@ class UserBloc extends Bloc {
       } else {
         print("You are playing with fire sir");
       }
-    }).onError((e){
+    }).onError((e) {
       print('onLinkError');
       print(e.message);
     });
@@ -507,10 +512,11 @@ class UserBloc extends Bloc {
   Future<Uri> createDynamicLink(String userId) async {
     final link = Uri.parse(
         "https://piety.page.link/?link=https://piety.page.link/inviteapp?username=$userId&apn=com.piety.piety");
-    final ShortDynamicLink shortenedLink =
-        await FirebaseDynamicLinks.instance.buildShortLink(
-          DynamicLinkParameters(link: link, uriPrefix: 'https://piety.page.link',)
-        );
+    final ShortDynamicLink shortenedLink = await FirebaseDynamicLinks.instance
+        .buildShortLink(DynamicLinkParameters(
+      link: link,
+      uriPrefix: 'https://piety.page.link',
+    ));
 
     //     DynamicLinkParameters.shortenUrl(
     //   link,

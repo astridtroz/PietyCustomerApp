@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+//import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -81,12 +81,13 @@ class _SplashScreenState extends State<SplashScreen>
             SizedBox(
               height: 80,
             ),
-            SpinKitSquareCircle(
+            //Todo
+            /* SpinKitSquareCircle(
               color: Colors.white,
               size: 50.0,
               controller: AnimationController(
                   vsync: this, duration: const Duration(milliseconds: 1200)),
-            ),
+            ),*/
           ],
         ),
       ),
