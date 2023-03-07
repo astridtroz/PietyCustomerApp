@@ -69,6 +69,8 @@ class _HomeServicesState extends State<HomeServices> {
                       ) {
                         return GestureDetector(
                           onTap: () {
+                            print("--------------------------");
+                            print(item.name);
                             storeBloc.mapEventToState(
                               SelectedStore(
                                 isFeatured: false,

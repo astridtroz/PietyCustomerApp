@@ -198,8 +198,7 @@ class StoreBloc extends Bloc {
           //insert each store to local DB
           _allStores.forEach((x) async {
             await _pietyFolder
-                .add(await _db, x.toJson())
-                .then((value) => print("Insert Success $value"));
+                .add(await _db, x.toJson());
           });
         });
         allStoreSink.add(stores);
@@ -235,9 +234,11 @@ class StoreBloc extends Bloc {
         Placemark place = event.currentPosition;
         String address = "${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
 
-        List<Location> location = await locationFromAddress(address);
-        var latx = location[0];
-        var longx = location[1];
+        var location = await locationFromAddress(address);
+        print("++++++++++");
+        print(location[0].latitude);
+        var latx = location[0].latitude;
+        var longx = location[0].longitude;
 
         List<Store> stores = [];
         if (getSelectedStore != null) {
@@ -251,8 +252,8 @@ class StoreBloc extends Bloc {
             //     LatLng(intermediateStore.storeCoordinates!.latitude,
             //         intermediateStore.storeCoordinates!.longitude));
             num distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
-                latx.latitude,
-                latx.longitude,
+                latx,
+                latx,
                 intermediateStore.storeCoordinates!.latitude,
                 intermediateStore.storeCoordinates!.longitude);
 
@@ -337,6 +338,7 @@ class StoreBloc extends Bloc {
       _store = newStore;
       print(_store);
       singleStoreSink.add(_store!);
+      
     } else if (event is FetchRateList) {
       FirebaseFirestore.instance
           .collection("rateLists")

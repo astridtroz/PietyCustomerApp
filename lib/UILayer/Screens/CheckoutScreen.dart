@@ -638,18 +638,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
                                       city: _userBloc!
-                                          .getSelectedUserAddress.city,
+                                          .getSelectedUserAddress?.city,
                                       name: name!,
                                       postalCode: _userBloc!
-                                          .getSelectedUserAddress.postalCode,
+                                          .getSelectedUserAddress?.postalCode,
                                       state: _userBloc!
-                                          .getSelectedUserAddress.state,
+                                          .getSelectedUserAddress?.state,
                                       houseNo: _userBloc!
-                                          .getSelectedUserAddress.houseNo,
+                                          .getSelectedUserAddress?.houseNo,
                                       landmark: _userBloc!
-                                          .getSelectedUserAddress.landmark,
+                                          .getSelectedUserAddress?.landmark,
                                       locality: _userBloc!
-                                          .getSelectedUserAddress.locality);
+                                          .getSelectedUserAddress?.locality);
                                   newOrder = Order(
                                     orderPlacingDate: DateTime.now(),
                                     orderStatus:
@@ -716,18 +716,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
                                       city: _userBloc!
-                                          .getSelectedUserAddress.city,
+                                          .getSelectedUserAddress?.city,
                                       name: name,
                                       postalCode: _userBloc!
-                                          .getSelectedUserAddress.postalCode,
+                                          .getSelectedUserAddress?.postalCode,
                                       state: _userBloc!
-                                          .getSelectedUserAddress.state,
+                                          .getSelectedUserAddress?.state,
                                       houseNo: _userBloc!
-                                          .getSelectedUserAddress.houseNo,
+                                          .getSelectedUserAddress?.houseNo,
                                       landmark: _userBloc!
-                                          .getSelectedUserAddress.landmark,
+                                          .getSelectedUserAddress?.landmark,
                                       locality: _userBloc!
-                                          .getSelectedUserAddress.locality);
+                                          .getSelectedUserAddress?.locality);
                                   newOrder = Order(
                                     orderPlacingDate: DateTime.now(),
                                     orderStatus:

@@ -651,8 +651,10 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 75, 0, 0),
               child: StreamBuilder<List<Store>>(
+
                 initialData: storeBloc!.getInitialStore,
                 stream: storeBloc!.storeTypeListStream,
+                
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Store>> snapshot) {
                   if (!snapshot.hasData) {
