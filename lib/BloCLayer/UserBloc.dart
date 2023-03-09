@@ -179,18 +179,22 @@ class UserBloc extends Bloc {
               .then((p) async {
             Placemark place = p[0];
             userPlace = place;
+
             _selectedUserAddress = UserAddress(
                 addressType: AddressType.home,
-                houseNo: null,
-                landmark: null,
+                houseNo: "",
+                landmark: place.name,
                 locality: place.subLocality,
                 city: place.locality,
                 state: place.administrativeArea,
                 postalCode: place.postalCode);
+
             selectedAddressSink.add(_selectedUserAddress!);
             positionSink.add(place);
+            
             List<Location> l =
-                await locationFromAddress(_selectedUserAddress!.toString());
+                await locationFromAddress(await _selectedUserAddress?.displayAddress() as String);
+
             var latx = l[0];
             selectedAddressLocationSink.add(latx);
 
