@@ -170,8 +170,8 @@ class UserBloc extends Bloc {
         getUserSink.add(newUser);
       });
     } else if (event is GetUserLocation) {
-
       if (await Permission.location.request().isGranted) {
+        
         print("Event is ${event.toString()}");
         Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
             .then((Position position) {
@@ -183,17 +183,16 @@ class UserBloc extends Bloc {
             _selectedUserAddress = UserAddress(
                 addressType: AddressType.home,
                 houseNo: "",
-                landmark: place.name,
-                locality: place.subLocality,
+                landmark: null,
+                locality: null,
                 city: place.locality,
                 state: place.administrativeArea,
                 postalCode: place.postalCode);
 
             selectedAddressSink.add(_selectedUserAddress!);
             positionSink.add(place);
-            
-            List<Location> l =
-                await locationFromAddress(await _selectedUserAddress?.displayAddress() as String);
+            List<Location> l = await locationFromAddress(
+                await _selectedUserAddress?.displayAddress() as String);
 
             var latx = l[0];
             selectedAddressLocationSink.add(latx);
@@ -209,7 +208,8 @@ class UserBloc extends Bloc {
                     .doc(_user!.uid)
                     .update(
                   {
-                    "addresses": FieldValue.arrayUnion([currentAddresses])
+                    "addresses":
+                        FieldValue.arrayUnion([currentAddresses[0].toJson()])
                   },
                 ).then((onValue) async {
                   //  _user = newUser;
@@ -339,13 +339,55 @@ class UserBloc extends Bloc {
       ///then use current location
       ///
 
-      _selectedUserAddress = _user!.addresses![event.index];
-      print("selectedAddress:: " + _selectedUserAddress!.displayAddress());
+      List is_address_available = await _user!.addresses as List;
+
+      if (is_address_available == [] || is_address_available.isEmpty) {
+        await Permission.location.request();
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        var user_lat = position.latitude;
+        var user_long = position.longitude;
+        List<Placemark> placemarks =
+            await placemarkFromCoordinates(user_lat, user_long);
+        Placemark placemark = placemarks[0];
+        _selectedUserAddress = UserAddress(
+            addressType: AddressType.home,
+            houseNo: "",
+            landmark: null,
+            locality: null,
+            city: placemark.locality,
+            state: placemark.administrativeArea,
+            postalCode: placemark.postalCode);
+
+        selectedAddressSink.add(_selectedUserAddress!);
+        positionSink.add(placemark);
+
+        List<Location> l = await locationFromAddress(
+            await _selectedUserAddress?.displayAddress() as String);
+
+        print("Location adding started ");
+        List<UserAddress> currentAddresses = myUser?.addresses ?? [];
+        currentAddresses.add(_selectedUserAddress!);
+        print("cuurent address::  " + currentAddresses.toString());
+
+        await databaseReference.collection("customers").doc(_user!.uid).update(
+          {
+            "addresses": FieldValue.arrayUnion([currentAddresses[0].toJson()])
+          },
+        ).then((onValue) async {
+          //  _user = newUser;
+          print("GET USER LOCATION" + _user.toString());
+        });
+
+        print("Location adding done.");
+      }
+
       final List<Location> locations = await locationFromAddress(
           _user!.addresses![event.index].displayAddress());
-      if (locations == null || locations.isEmpty) {
-        return;
-      }
+
+      _selectedUserAddress = _user!.addresses![event.index];
+      print("selectedAddress:: " + _selectedUserAddress!.displayAddress());
+
       final Location firstLocation = locations.first;
       List<Placemark> place = await placemarkFromCoordinates(
         firstLocation.latitude,

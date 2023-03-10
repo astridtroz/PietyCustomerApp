@@ -233,10 +233,11 @@ class StoreBloc extends Bloc {
         // Position currentPosition = event.currentPosition.position;
         Placemark place = event.currentPosition;
         String address = "${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
-
         var location = await locationFromAddress(address);
         print("++++++++++");
         print(location[0].latitude);
+        
+
         var latx = location[0].latitude;
         var longx = location[0].longitude;
 
@@ -256,11 +257,12 @@ class StoreBloc extends Bloc {
                 latx,
                 intermediateStore.storeCoordinates!.latitude,
                 intermediateStore.storeCoordinates!.longitude);
-
+                print("ccccccc");
             if (distanceInMeters <
-                KmToMeter.getMeterFromKM(
-                    intermediateStore.selfDeliveryDistance!)) {
+                KmToMeter.getMeterFromKM(intermediateStore.selfDeliveryDistance!)) {
+                print("jjjjj");
               stores.add(intermediateStore);
+
             } else {
               print(
                   "My distance from store ${store.name} and distance $distanceInMeters");
@@ -268,6 +270,7 @@ class StoreBloc extends Bloc {
             // stores.add(intermediateStore);
           });
         }
+        print("$stores kkkkkkk");
         _initialStores = stores;
         sortedStores = stores;
         storeTypeListSink.add(stores);
@@ -277,8 +280,7 @@ class StoreBloc extends Bloc {
       // Position currentPosition = event.currentPosition.position;
       List<Location> location = await locationFromAddress(event.currentPosition.locality.toString());
       var latx = location[0];
-      // print(
-      //     "LatLng is : ${currentPosition.latitude}+${currentPosition.longitude}");
+      print("$latx ppp");
 
       List<Store> stores = [];
       _allStores.forEach((store) {
@@ -299,6 +301,7 @@ class StoreBloc extends Bloc {
           stores.add(intermediateStore);
         }
       });
+      print("$stores ooooo");
       _initialStores = stores;
       sortedStores = stores;
       storeTypeListSink.add(stores);
