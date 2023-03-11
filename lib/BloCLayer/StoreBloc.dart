@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlng/latlng.dart';
-import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
 import 'package:sembast/sembast.dart';
 
 import '/BloCLayer/AdminBloc.dart';
@@ -197,9 +195,7 @@ class StoreBloc extends Bloc {
         await _pietyFolder.drop(await _db).then((_) {
           //insert each store to local DB
           _allStores.forEach((x) async {
-            await _pietyFolder
-                .add(await _db, x.toJson())
-                .then((value) => print("Insert Success $value"));
+            await _pietyFolder.add(await _db, x.toJson());
           });
         });
         allStoreSink.add(stores);
@@ -233,11 +229,14 @@ class StoreBloc extends Bloc {
       if (event.currentPosition != null) {
         // Position currentPosition = event.currentPosition.position;
         Placemark place = event.currentPosition;
-        String address = "${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+        String address =
+            "${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+        var location = await locationFromAddress(address);
+        print("++++++++++");
+        print(location[0].latitude);
 
-        List<Location> location = await locationFromAddress(address);
-        var latx = location[0];
-        var longx = location[1];
+        var latx = location[0].latitude;
+        var longx = location[0].longitude;
 
         List<Store> stores = [];
         if (getSelectedStore != null) {
@@ -251,14 +250,18 @@ class StoreBloc extends Bloc {
             //     LatLng(intermediateStore.storeCoordinates!.latitude,
             //         intermediateStore.storeCoordinates!.longitude));
             num distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
-                latx.latitude,
-                latx.longitude,
+                latx,
+                latx,
                 intermediateStore.storeCoordinates!.latitude,
                 intermediateStore.storeCoordinates!.longitude);
-
+            print("ccccccc");
+            print(intermediateStore.name);
+            print(intermediateStore.selfDeliveryDistance);
             if (distanceInMeters <
                 KmToMeter.getMeterFromKM(
                     intermediateStore.selfDeliveryDistance!)) {
+              print("jjjjj");
+              print(distanceInMeters);
               stores.add(intermediateStore);
             } else {
               print(
@@ -267,6 +270,7 @@ class StoreBloc extends Bloc {
             // stores.add(intermediateStore);
           });
         }
+        print("$stores kkkkkkk");
         _initialStores = stores;
         sortedStores = stores;
         storeTypeListSink.add(stores);
@@ -274,19 +278,20 @@ class StoreBloc extends Bloc {
     } else if (event is GetStoresOfType) {
       print("GETSTOREOFTYPE");
       // Position currentPosition = event.currentPosition.position;
-      List<Location> location = await locationFromAddress(event.currentPosition.locality.toString());
+      List<Location> location =
+          await locationFromAddress(event.currentPosition.locality.toString());
       var latx = location[0];
-      // print(
-      //     "LatLng is : ${currentPosition.latitude}+${currentPosition.longitude}");
+      print("$latx ppp");
 
       List<Store> stores = [];
       _allStores.forEach((store) {
         Store intermediateStore = store;
         num distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
-            latx.latitude, latx.longitude,
+            latx.latitude,
+            latx.longitude,
             // LatLng(currentPosition.latitude, currentPosition.longitude),
             intermediateStore.storeCoordinates!.latitude,
-                intermediateStore.storeCoordinates!.longitude);
+            intermediateStore.storeCoordinates!.longitude);
         // print("interStore Distance::: " +
         //     intermediateStore.name +
         //     " Allowed Dist:::: " +
@@ -298,6 +303,7 @@ class StoreBloc extends Bloc {
           stores.add(intermediateStore);
         }
       });
+      print("$stores ooooo");
       _initialStores = stores;
       sortedStores = stores;
       storeTypeListSink.add(stores);
@@ -346,10 +352,12 @@ class StoreBloc extends Bloc {
         _allServices = [];
         _addOnServices = [];
         _categoryRateList = [];
-        _singleStoreRateList = RateList.fromSnapshot(snapshot.docs[0] as QueryDocumentSnapshot<Map<String, dynamic>>);
+        _singleStoreRateList = RateList.fromSnapshot(
+            snapshot.docs[0] as QueryDocumentSnapshot<Map<String, dynamic>>);
         //print("Rate List length is : ${snapshot.docs.length}");
         if (snapshot.docs != null && snapshot.docs.isNotEmpty) {
-          RateList loaded = RateList.fromSnapshot(snapshot.docs.first as QueryDocumentSnapshot<Map<String, dynamic>>);
+          RateList loaded = RateList.fromSnapshot(snapshot.docs.first
+              as QueryDocumentSnapshot<Map<String, dynamic>>);
           _initialRateList = loaded;
           print("LOADED::" + loaded.toString());
           for (int i = 0; i < loaded.categoryList!.length; i++) {
@@ -369,7 +377,8 @@ class StoreBloc extends Bloc {
           allServicesSink.add(_allServices);
           addOnServicesSink.add(_addOnServices);
 
-          singleRateListSink.add(RateList.fromSnapshot(snapshot.docs.first as QueryDocumentSnapshot<Map<String, dynamic>>));
+          singleRateListSink.add(RateList.fromSnapshot(snapshot.docs.first
+              as QueryDocumentSnapshot<Map<String, dynamic>>));
         } else {
           singleRateListSink.addError("Unable to Fetch Rate List");
         }

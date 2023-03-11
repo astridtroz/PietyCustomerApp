@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -633,23 +632,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             : () async {
                                 Order newOrder;
                                 if (_store!.storeType == "Laundry") {
-
-                                  List<Location> location = await locationFromAddress(_userBloc!.getSelectedUserAddress.toString());
+                                  List<Location> location =
+                                      await locationFromAddress(_userBloc!
+                                          .getSelectedUserAddress
+                                          .toString());
                                   var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
                                       city: _userBloc!
-                                          .getSelectedUserAddress.city,
+                                          .getSelectedUserAddress?.city,
                                       name: name!,
                                       postalCode: _userBloc!
-                                          .getSelectedUserAddress.postalCode,
+                                          .getSelectedUserAddress?.postalCode,
                                       state: _userBloc!
-                                          .getSelectedUserAddress.state,
+                                          .getSelectedUserAddress?.state,
                                       houseNo: _userBloc!
-                                          .getSelectedUserAddress.houseNo,
+                                          .getSelectedUserAddress?.houseNo,
                                       landmark: _userBloc!
-                                          .getSelectedUserAddress.landmark,
+                                          .getSelectedUserAddress?.landmark,
                                       locality: _userBloc!
-                                          .getSelectedUserAddress.locality);
+                                          .getSelectedUserAddress?.locality);
                                   newOrder = Order(
                                     orderPlacingDate: DateTime.now(),
                                     orderStatus:
@@ -681,10 +682,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ? DeliveryMode.homeDelivery
                                         : DeliveryMode.selfPickup,
                                     userCoordinates: LatLngExtended(
-                                      latx.latitude,latx.longitude
-                                      // _userBloc!.userPlace!.position.latitude,
-                                      // _userBloc!.userPlace!.position.longitude,
-                                    ),
+                                        latx.latitude, latx.longitude
+                                        // _userBloc!.userPlace!.position.latitude,
+                                        // _userBloc!.userPlace!.position.longitude,
+                                        ),
                                     userName: _user!.name,
                                     userAddress: orderAddress,
                                     userPhoneNumber: _user!.phoneNumbers![0],
@@ -712,22 +713,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   _orderBloc!.mapEventToState(
                                       CreateOrder(order: newOrder));
                                 } else {
-                                  List<Location> location = await locationFromAddress(_userBloc!.getSelectedUserAddress.toString());
+                                  List<Location> location =
+                                      await locationFromAddress(_userBloc!
+                                          .getSelectedUserAddress
+                                          .toString());
                                   var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
                                       city: _userBloc!
-                                          .getSelectedUserAddress.city,
+                                          .getSelectedUserAddress?.city,
                                       name: name,
                                       postalCode: _userBloc!
-                                          .getSelectedUserAddress.postalCode,
+                                          .getSelectedUserAddress?.postalCode,
                                       state: _userBloc!
-                                          .getSelectedUserAddress.state,
+                                          .getSelectedUserAddress?.state,
                                       houseNo: _userBloc!
-                                          .getSelectedUserAddress.houseNo,
+                                          .getSelectedUserAddress?.houseNo,
                                       landmark: _userBloc!
-                                          .getSelectedUserAddress.landmark,
+                                          .getSelectedUserAddress?.landmark,
                                       locality: _userBloc!
-                                          .getSelectedUserAddress.locality);
+                                          .getSelectedUserAddress?.locality);
                                   newOrder = Order(
                                     orderPlacingDate: DateTime.now(),
                                     orderStatus:
@@ -753,10 +757,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     pickupDateTimeRequested:
                                         _pickUpDateTimeRequested!,
                                     userCoordinates: LatLngExtended(
-                                      latx.latitude,latx.longitude
-                                      // _userBloc!.userPlace!.position.latitude,
-                                      // _userBloc!.userPlace!.position.longitude,
-                                    ),
+                                        latx.latitude, latx.longitude
+                                        // _userBloc!.userPlace!.position.latitude,
+                                        // _userBloc!.userPlace!.position.longitude,
+                                        ),
                                     userName: _user!.name,
                                     userAddress: orderAddress,
                                     userPhoneNumber: _user!.phoneNumbers![0],

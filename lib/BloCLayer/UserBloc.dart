@@ -8,6 +8,7 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:modern_form_esys_flutter_share/modern_form_esys_flutter_share.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '/DataLayer/Models/Other/Enums.dart';
 import '/DataLayer/Services/SignInMethods.dart';
@@ -57,15 +58,16 @@ class UserBloc extends Bloc {
   // }
 
   Placemark? userPlace;
-  Placemark get getUserPlace => this.userPlace!;
+  Placemark? get getUserPlace => this.userPlace;
 
   Location? _selectedUserLocationAddress;
-  Location get getSelectedUserLocationAddress => _selectedUserLocationAddress!;
+
+  Location? get getSelectedUserLocationAddress => _selectedUserLocationAddress;
 
   UserAddress? _selectedUserAddress;
-  UserAddress get getSelectedUserAddress => _selectedUserAddress!;
+  UserAddress? get getSelectedUserAddress => _selectedUserAddress;
   List<UserAddress>? _userAddressList;
-  List<UserAddress> get getUserAllAddress => _userAddressList!;
+  List<UserAddress>? get getUserAllAddress => _userAddressList;
 
   /// Event controllers
   StreamController<UserEvent> _userEventController =
@@ -168,51 +170,62 @@ class UserBloc extends Bloc {
         getUserSink.add(newUser);
       });
     } else if (event is GetUserLocation) {
-      print("Event is ${event.toString()}");
-      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-          .then((Position position) {
-        placemarkFromCoordinates(position.latitude, position.longitude)
-            .then((p) async {
-          Placemark place = p[0];
-          userPlace = place;
-          _selectedUserAddress = UserAddress(
-              addressType: AddressType.home,
-              houseNo: null,
-              landmark: null,
-              locality: place.subLocality,
-              city: place.locality,
-              state: place.administrativeArea,
-              postalCode: place.postalCode);
-          selectedAddressSink.add(_selectedUserAddress!);
-          positionSink.add(place);
-          List<Location> l =
-              await locationFromAddress(_selectedUserAddress!.toString());
-          var latx = l[0];
-          selectedAddressLocationSink.add(latx);
+      if (await Permission.location.request().isGranted) {
+        
+        print("Event is ${event.toString()}");
+        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+            .then((Position position) {
+          placemarkFromCoordinates(position.latitude, position.longitude)
+              .then((p) async {
+            Placemark place = p[0];
+            userPlace = place;
 
-          getUserStream.listen((myUser) async {
-            List<UserAddress> currentAddresses = myUser.addresses ?? [];
-            //print("MY USER CALLED IN GET USER STREAM");
-            if (!myUser.addresses!.contains(_selectedUserAddress)) {
-              currentAddresses.add(_selectedUserAddress!);
-              print("cuurent address::  " + currentAddresses.toString());
-              await databaseReference
-                  .collection("customers")
-                  .doc(_user!.uid)
-                  .update(
-                {
-                  "addresses": FieldValue.arrayUnion([currentAddresses])
-                },
-              ).then((onValue) async {
-                //  _user = newUser;
-                print("GET USER LOCATION" + _user.toString());
-              });
-            }
+            _selectedUserAddress = UserAddress(
+                addressType: AddressType.home,
+                houseNo: "",
+                landmark: null,
+                locality: null,
+                city: place.locality,
+                state: place.administrativeArea,
+                postalCode: place.postalCode);
+
+            selectedAddressSink.add(_selectedUserAddress!);
+            positionSink.add(place);
+            List<Location> l = await locationFromAddress(
+                await _selectedUserAddress?.displayAddress() as String);
+
+            var latx = l[0];
+            selectedAddressLocationSink.add(latx);
+
+            getUserStream.listen((myUser) async {
+              List<UserAddress> currentAddresses = myUser.addresses ?? [];
+              //print("MY USER CALLED IN GET USER STREAM");
+              if (!myUser.addresses!.contains(_selectedUserAddress)) {
+                currentAddresses.add(_selectedUserAddress!);
+                print("cuurent address::  " + currentAddresses.toString());
+                await databaseReference
+                    .collection("customers")
+                    .doc(_user!.uid)
+                    .update(
+                  {
+                    "addresses":
+                        FieldValue.arrayUnion([currentAddresses[0].toJson()])
+                  },
+                ).then((onValue) async {
+                  //  _user = newUser;
+                  print("GET USER LOCATION" + _user.toString());
+                });
+              }
+            });
           });
+        }).catchError((e) {
+          print(e);
         });
-      }).catchError((e) {
-        print(e);
-      });
+      } else {
+        Fluttertoast.showToast(
+            msg: "Please Enable Location Permission for better experience");
+        await Permission.location.request();
+      }
     } else if (event is GetUserDetails) {
       await FirebaseAuth.instance.authStateChanges().listen((user) async {
         await user?.getIdToken()?.then((token) async {
@@ -326,13 +339,55 @@ class UserBloc extends Bloc {
       ///then use current location
       ///
 
-      _selectedUserAddress = _user!.addresses![event.index];
-      print("selectedAddress:: " + _selectedUserAddress!.displayAddress());
+      List is_address_available = await _user!.addresses as List;
+
+      if (is_address_available == [] || is_address_available.isEmpty) {
+        await Permission.location.request();
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        var user_lat = position.latitude;
+        var user_long = position.longitude;
+        List<Placemark> placemarks =
+            await placemarkFromCoordinates(user_lat, user_long);
+        Placemark placemark = placemarks[0];
+        _selectedUserAddress = UserAddress(
+            addressType: AddressType.home,
+            houseNo: "",
+            landmark: null,
+            locality: null,
+            city: placemark.locality,
+            state: placemark.administrativeArea,
+            postalCode: placemark.postalCode);
+
+        selectedAddressSink.add(_selectedUserAddress!);
+        positionSink.add(placemark);
+
+        List<Location> l = await locationFromAddress(
+            await _selectedUserAddress?.displayAddress() as String);
+
+        print("Location adding started ");
+        List<UserAddress> currentAddresses = myUser?.addresses ?? [];
+        currentAddresses.add(_selectedUserAddress!);
+        print("cuurent address::  " + currentAddresses.toString());
+
+        await databaseReference.collection("customers").doc(_user!.uid).update(
+          {
+            "addresses": FieldValue.arrayUnion([currentAddresses[0].toJson()])
+          },
+        ).then((onValue) async {
+          //  _user = newUser;
+          print("GET USER LOCATION" + _user.toString());
+        });
+
+        print("Location adding done.");
+      }
+
       final List<Location> locations = await locationFromAddress(
           _user!.addresses![event.index].displayAddress());
-      if (locations == null || locations.isEmpty) {
-        return;
-      }
+
+      _selectedUserAddress = _user!.addresses![event.index];
+      print("selectedAddress:: " + _selectedUserAddress!.displayAddress());
+
       final Location firstLocation = locations.first;
       List<Placemark> place = await placemarkFromCoordinates(
         firstLocation.latitude,
@@ -351,6 +406,7 @@ class UserBloc extends Bloc {
           event.latLng.latitude, event.latLng.longitude);
 
       Placemark place = p[0];
+
       print(
           "Address is :  ${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}");
 
