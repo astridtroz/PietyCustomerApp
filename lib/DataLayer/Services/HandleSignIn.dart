@@ -34,6 +34,7 @@ class HandleSignIn extends StatelessWidget {
             _adminBloc.fetchMetaData().then(
               (value) {
                 _storeBloc.setAdminBloc = _adminBloc;
+                print("lllll");
                 _userBloc.mapEventToState(GetUserLocation());
                 _userBloc.allAddressStream.listen((event) {});
                 _storeBloc.mapEventToState(GetAllStore());

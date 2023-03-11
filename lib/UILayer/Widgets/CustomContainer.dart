@@ -71,7 +71,7 @@ class CustomContainer extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: image ??
+                      child:
                           Image.asset(
                             "assets/Images/machine.png",
                             fit: BoxFit.contain,
@@ -129,7 +129,7 @@ class CustomContainer extends StatelessWidget {
                                   SizedBox(
                                     width: 3,
                                   ),
-                                  Text("${distanceInMeters / 1000} KM"),
+                                  Text("${(distanceInMeters / 1000).toString().substring(0, 4)} KM"),
                                 ],
                               ),
                             ],

@@ -288,30 +288,34 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                               label: Text("Add Another location",
                                   style: TextStyle(fontSize: 15.0)),
                               onPressed: () async {
-                                Position position = await Geolocator
-                                    .getCurrentPosition(
+                                Position position =
+                                    await Geolocator.getCurrentPosition(
                                         desiredAccuracy: LocationAccuracy.high);
                                 _pickedLocation = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        FlutterLocationPicker(
-                                            initPosition: LatLong(position.latitude,position.longitude),
-                                            selectLocationButtonStyle: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all(Colors.blue),
-                                            ),
-                                            selectLocationButtonText: 'Set Current Location',
-                                            initZoom: 11,
-                                            minZoomLevel: 5,
-                                            maxZoomLevel: 16,
-                                            trackMyPosition: true,
-                                            onError: (e) => print(e),
-                                            onPicked: (pickedData) {
-                                              print(pickedData.latLong.latitude);
-                                              print(pickedData.latLong.longitude);
-                                              print(pickedData.address);
-                                              print(pickedData.addressData['country']);
-                                            }),
+                                    builder: (context) => FlutterLocationPicker(
+                                        initPosition: LatLong(position.latitude,
+                                            position.longitude),
+                                        selectLocationButtonStyle: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.blue),
+                                        ),
+                                        selectLocationButtonText:
+                                            'Set Current Location',
+                                        initZoom: 11,
+                                        minZoomLevel: 5,
+                                        maxZoomLevel: 16,
+                                        trackMyPosition: true,
+                                        onError: (e) => print(e),
+                                        onPicked: (pickedData) {
+                                          print(pickedData.latLong.latitude);
+                                          print(pickedData.latLong.longitude);
+                                          print(pickedData.address);
+                                          print(pickedData
+                                              .addressData['country']);
+                                        }),
 
                                     //     PlacePickerScreen(
                                     //   googlePlacesApiKey: Constants.mapsAPIkey,
@@ -330,8 +334,8 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                   //     SelectUserAddress(index: ));
                                   _userBloc!.mapEventToState(AddAddressByLatLng(
                                       latLng: _pickedLocation!
-                                          // .latLng
-                                  ));
+                                      // .latLng
+                                      ));
                                 }
                                 setState(() {
                                   // print(_isSelected);
@@ -653,6 +657,7 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
               child: StreamBuilder<List<Store>>(
                 initialData: storeBloc!.getInitialStore,
                 stream: storeBloc!.storeTypeListStream,
+                
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Store>> snapshot) {
                   if (!snapshot.hasData) {
@@ -719,8 +724,7 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                         loadedStores[count].storeCoordinates!,
                                     isLaundry: loadedStores[count].storeType ==
                                             "Laundry"
-                                        ? true
-                                        : false,
+                                        ? true : false,
                                     storeName: loadedStores[count].name!,
                                     storeAddress: loadedStores[count]
                                         .address!
