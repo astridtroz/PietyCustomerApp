@@ -294,28 +294,46 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                 _pickedLocation = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FlutterLocationPicker(
-                                        initPosition: LatLong(position.latitude,
-                                            position.longitude),
-                                        selectLocationButtonStyle: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.blue),
-                                        ),
-                                        selectLocationButtonText:
-                                            'Set Current Location',
-                                        initZoom: 11,
-                                        minZoomLevel: 5,
-                                        maxZoomLevel: 16,
-                                        trackMyPosition: true,
-                                        onError: (e) => print(e),
-                                        onPicked: (pickedData) {
-                                          print(pickedData.latLong.latitude);
-                                          print(pickedData.latLong.longitude);
-                                          print(pickedData.address);
-                                          print(pickedData
-                                              .addressData['country']);
-                                        }),
+                                    builder: (context) => Material(
+                                      child: FlutterLocationPicker(
+                                          initPosition: LatLong(position.latitude,
+                                              position.longitude),
+                                          selectLocationButtonStyle: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.blue),
+                                          ),
+                                          selectLocationButtonText:
+                                              'Set Current Location',
+                                          initZoom: 11,
+                                          minZoomLevel: 5,
+                                          maxZoomLevel: 16,
+                                          trackMyPosition: true,
+                                          onError: (e) => print(e),
+                                          onPicked: (pickedData) {
+                                            print(pickedData.latLong.latitude);
+                                            print(pickedData.latLong.longitude);
+                                            print(pickedData.address);
+                                            print(pickedData
+                                                .addressData['country']);
+                                            _pickedLocation = LatLng(pickedData.latLong.latitude, pickedData.latLong.longitude);
+                                            if (_pickedLocation != null) {
+                                              // print("Picked location:: " +
+                                              //     _pickedLocation.address);
+                                              // _userBloc.mapEventToState(
+                                              //     SelectUserAddress(index: ));
+                                              _userBloc!.mapEventToState(AddAddressByLatLng(
+                                                  latLng: _pickedLocation!
+                                                // .latLng
+                                              ));
+                                            }
+                                            setState(() {
+                                              // print(_isSelected);
+                                              _isSelected = false;
+                                            });
+                                            Navigator.pop(context);
+                                          }),
+                                    ),
 
                                     //     PlacePickerScreen(
                                     //   googlePlacesApiKey: Constants.mapsAPIkey,
@@ -327,21 +345,21 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                     // ),
                                   ),
                                 );
-                                if (_pickedLocation != null) {
-                                  // print("Picked location:: " +
-                                  //     _pickedLocation.address);
-                                  // _userBloc.mapEventToState(
-                                  //     SelectUserAddress(index: ));
-                                  _userBloc!.mapEventToState(AddAddressByLatLng(
-                                      latLng: _pickedLocation!
-                                      // .latLng
-                                      ));
-                                }
-                                setState(() {
-                                  // print(_isSelected);
-                                  _isSelected = false;
-                                });
-                                Navigator.pop(context);
+                                // if (_pickedLocation != null) {
+                                //   // print("Picked location:: " +
+                                //   //     _pickedLocation.address);
+                                //   // _userBloc.mapEventToState(
+                                //   //     SelectUserAddress(index: ));
+                                //   _userBloc!.mapEventToState(AddAddressByLatLng(
+                                //       latLng: _pickedLocation!
+                                //       // .latLng
+                                //       ));
+                                // }
+                                // setState(() {
+                                //   // print(_isSelected);
+                                //   _isSelected = false;
+                                // });
+                                // Navigator.pop(context);
                               },
                             )
                           ],
