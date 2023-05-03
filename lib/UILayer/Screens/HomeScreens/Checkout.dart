@@ -516,7 +516,8 @@ class _CheckoutState extends State<Checkout> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text('Regular Delivery'),
                                       Row(
@@ -534,14 +535,14 @@ class _CheckoutState extends State<Checkout> {
                                 height: 60,
                                 width: 140,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(7),
-                                  color: Colors.white,
-                                  border: Border.all()
-                                ),
+                                    borderRadius: BorderRadius.circular(7),
+                                    color: Colors.white,
+                                    border: Border.all()),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text('Express Delivery'),
                                       Row(

@@ -289,8 +289,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   child: StreamBuilder<User?>(
                       stream: FirebaseAuth.instance.authStateChanges(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<User?> snapshot) {
+                      builder: (BuildContext context,
+                          AsyncSnapshot<User?> snapshot) {
                         return TextButton(
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();

@@ -26,7 +26,7 @@ class _RazorPayState extends State<RazorPay> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  ElevatedButton(onPressed: openCheckout, child: Text('Open'))
+              ElevatedButton(onPressed: openCheckout, child: Text('Open'))
             ])),
       ),
     );

@@ -23,7 +23,8 @@ class AdminBloc extends Bloc {
 
   Future<void> fetchMetaData() async {
     if (_adminMetaData == null) {
-      DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
           .collection("admin_panel")
           .doc("data")
           .get();

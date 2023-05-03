@@ -433,10 +433,10 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                               return StreamBuilder<
                                                                       Store>(
                                                                   initialData:
-                                                                      _storeBloc
-                                                                          !.getSingleStore,
-                                                                  stream: _storeBloc
-                                                                      !.singleStoreStream,
+                                                                      _storeBloc!
+                                                                          .getSingleStore,
+                                                                  stream: _storeBloc!
+                                                                      .singleStoreStream,
                                                                   builder: (context,
                                                                       snapshot) {
                                                                     if (snapshot
@@ -514,10 +514,10 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                                         List<
                                                                             Store>>(
                                                                     initialData:
-                                                                        _storeBloc
-                                                                            !.getInitialStore,
-                                                                    stream: _storeBloc
-                                                                        !.storeTypeListStream,
+                                                                        _storeBloc!
+                                                                            .getInitialStore,
+                                                                    stream: _storeBloc!
+                                                                        .storeTypeListStream,
                                                                     builder:
                                                                         (context,
                                                                             snapshot) {
@@ -525,7 +525,9 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                                           loadedStores =
                                                                           snapshot
                                                                               .data!;
-                                                                      List<ComparisionChartData> myData = [];
+                                                                      List<ComparisionChartData>
+                                                                          myData =
+                                                                          [];
                                                                       loadedStores
                                                                           .forEach(
                                                                               (store) {
@@ -599,8 +601,9 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                       ],
                                                     ),
                                                     onTap: () async {
-                                                      Store myStore = _storeBloc
-                                                          !.getSingleStore;
+                                                      Store myStore =
+                                                          _storeBloc!
+                                                              .getSingleStore;
                                                       String googleUrl =
                                                           'https://www.google.com/maps/search/?api=1&query=${myStore.storeCoordinates?.latitude},${myStore.storeCoordinates?.longitude}';
                                                       if (await canLaunch(
@@ -644,15 +647,15 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                             loadedStore.storeType !=
                                                     "Grocery Vendor"
                                                 ? StreamBuilder<List<String>>(
-                                                    stream: _storeBloc
-                                                        !.allServicesStream,
-                                                    initialData: _storeBloc
-                                                        !.getAllServices,
+                                                    stream: _storeBloc!
+                                                        .allServicesStream,
+                                                    initialData: _storeBloc!
+                                                        .getAllServices,
                                                     builder:
                                                         (context, snapshot) {
                                                       return Container(
-                                                          child: snapshot.data
-                                                                      !.length ==
+                                                          child: snapshot.data!
+                                                                      .length ==
                                                                   0
 
                                                               ///if no data
@@ -665,19 +668,17 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                               ///for other categories
                                                               Center(
                                                                   child:
-                                                                  TextButton(
+                                                                      TextButton(
                                                                     // color: Colors
                                                                     //     .blueGrey,
-                                                          style: ButtonStyle(
-                                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                              RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      0.0),
-                                                                  side: BorderSide(
-                                                                      color:
-                                                                      Colors.lightBlueAccent)),
-                                                            )),
+                                                                    style: ButtonStyle(
+                                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                                      RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.circular(
+                                                                              0.0),
+                                                                          side:
+                                                                              BorderSide(color: Colors.lightBlueAccent)),
+                                                                    )),
 
                                                                     child: Text(
                                                                       "Select Services",
@@ -731,7 +732,11 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                                                               avatar: _selectedText.contains(item) ? Icon(Icons.done) : Icon(Icons.add),
                                                                                               onSelected: (value) {
                                                                                                 setState(() {
-                                                                                                  _selectedText.contains(item) ? _selectedText.remove(item) : _selectedText.length < 10 ? _selectedText.add(item) : Fluttertoast.showToast(msg: "You Can't Select More than 10 Categories");
+                                                                                                  _selectedText.contains(item)
+                                                                                                      ? _selectedText.remove(item)
+                                                                                                      : _selectedText.length < 10
+                                                                                                          ? _selectedText.add(item)
+                                                                                                          : Fluttertoast.showToast(msg: "You Can't Select More than 10 Categories");
                                                                                                 });
                                                                                               },
                                                                                             ),
@@ -814,12 +819,12 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                             StreamBuilder<List<String>>(
                                                 stream: _storeBloc!
                                                     .addOnServicesStream,
-                                                initialData:
-                                                    _storeBloc!.getAddOnServices,
+                                                initialData: _storeBloc!
+                                                    .getAddOnServices,
                                                 builder: (context, snapshot) {
                                                   return Visibility(
-                                                      visible: snapshot.data
-                                                                  !.length !=
+                                                      visible: snapshot.data!
+                                                                  .length !=
                                                               0
                                                           ? true
                                                           : false,
@@ -848,8 +853,8 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                                         crossAxisCount:
                                                                             2,
                                                                         itemCount: snapshot
-                                                                            .data
-                                                                            !.length,
+                                                                            .data!
+                                                                            .length,
                                                                         shrinkWrap:
                                                                             true,
                                                                         padding:
@@ -894,8 +899,8 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
 
                                           ///for grocery vendor
                                           StreamBuilder<RateList>(
-                                              stream: _storeBloc
-                                                  !.singleRateListStream,
+                                              stream: _storeBloc!
+                                                  .singleRateListStream,
 //                                        initialData: _storeBloc.getInitialRateList,
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
@@ -1082,8 +1087,7 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                         toastLength: Toast.LENGTH_LONG);
                                   }
                                 : () {
-                                    List<String> selectedServices =
-                                        [];
+                                    List<String> selectedServices = [];
                                     _selectedText.forEach((service) {
                                       selectedServices.add(service);
                                     });
@@ -1129,7 +1133,8 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
 
   List<DropdownMenuItem<String>>? items = [];
 
-  Widget buildSearchWidget(List<RateListItem> fetchedList, BuildContext context){
+  Widget buildSearchWidget(
+      List<RateListItem> fetchedList, BuildContext context) {
     List<String> services;
     services = fetchedList.map((item) => item.serviceName!).toList();
     services.add("All");
@@ -1311,7 +1316,7 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                           color: Color(0xFFD17E50), size: 20),
                       onTap: () {
                         setState(() {
-                          _numberOfItems[name] = _numberOfItems[name]! +1;
+                          _numberOfItems[name] = _numberOfItems[name]! + 1;
                           if (!_selectedText.contains(name))
                             _selectedText.add(name);
                         });
@@ -1341,7 +1346,7 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                           color: Colors.red, size: 20),
                       onTap: () {
                         setState(() {
-                          _numberOfItems[name] = _numberOfItems[name]! -1;
+                          _numberOfItems[name] = _numberOfItems[name]! - 1;
                           if (_numberOfItems[name] == 0) {
                             _selectedText.remove(name);
                           }

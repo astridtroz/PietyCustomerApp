@@ -28,10 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   UserBloc? _userBloc;
   int? getUserLocationIndex;
 
-
-
   @override
-  void initState() {  
+  void initState() {
     super.initState();
     // setAdressIndex();
   }
@@ -112,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             return;
                           } else {
                             setState(() {
-                              
                               print('$item');
                             });
                             _storeBloc!.mapEventToState(

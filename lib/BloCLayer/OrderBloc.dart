@@ -89,11 +89,14 @@ class OrderBloc extends Bloc {
       cloud.DocumentReference ref = await databaseReference
           .collection(orderCollection)
           .add({"orderId": ""});
-      await databaseReference
+      String id = ref.id;
+      print("order id  " + id);
+      final order = await databaseReference
           .collection(orderCollection)
           .doc(ref.id)
           .set(event.order.toJson(ref.id), cloud.SetOptions(merge: true))
           .then((value) => Fluttertoast.showToast(msg: "OrderPlaced 👍"));
+      print("order: " + order.toString());
       print("Create Event Triggered");
       _createOrderStream.listen((newOrder) {
         _newOrder = newOrder;
@@ -114,7 +117,8 @@ class OrderBloc extends Bloc {
         List<Order> _awaitingOrder =
             []; // [] putted at the place of List<Order>(_length) while making it runnable
         for (int i = 0; i < _length; i++) {
-          _awaitingOrder[i] = Order.fromSnapshot(snapshot.docs[i] as cloud.QueryDocumentSnapshot<Map<String, dynamic>>);
+          _awaitingOrder[i] = Order.fromSnapshot(snapshot.docs[i]
+              as cloud.QueryDocumentSnapshot<Map<String, dynamic>>);
         }
         _awaitingOrderSink.add(_awaitingOrder);
       });
@@ -130,7 +134,8 @@ class OrderBloc extends Bloc {
           .listen((cloud.QuerySnapshot snapshot) {
         _currentOrders = [];
         for (int i = 0; i < snapshot.docs.length; i++) {
-          _currentOrders.add(Order.fromSnapshot(snapshot.docs[i] as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
+          _currentOrders.add(Order.fromSnapshot(snapshot.docs[i]
+              as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
         }
         _currentOrderSink.add(_currentOrders);
         // List<Order> _currentOrder = List<Order>(_length);
@@ -151,7 +156,8 @@ class OrderBloc extends Bloc {
         print("L = $_length");
         _pastOrders = [];
         for (int i = 0; i < snapshot.docs.length; i++) {
-          _pastOrders.add(Order.fromSnapshot(snapshot.docs[i] as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
+          _pastOrders.add(Order.fromSnapshot(snapshot.docs[i]
+              as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
         }
         pastOrderListSink.add(_pastOrders);
         // List<Order> _pastOrders = List<Order>(_length);

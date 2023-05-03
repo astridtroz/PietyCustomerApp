@@ -688,7 +688,8 @@ class _MainScreenState extends State<MainScreen> {
                                   SizedBox(
                                       height: 90,
                                       width: 70,
-                                      child: Image.asset('assets/Images/mechanic.png')),
+                                      child: Image.asset(
+                                          'assets/Images/mechanic.png')),
                                   const Text('Mechanic',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -715,7 +716,8 @@ class _MainScreenState extends State<MainScreen> {
                                   SizedBox(
                                       height: 90,
                                       width: 70,
-                                      child: Image.asset('assets/Images/water_tap.png')),
+                                      child: Image.asset(
+                                          'assets/Images/water_tap.png')),
                                   const Text('Plumber',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -742,7 +744,8 @@ class _MainScreenState extends State<MainScreen> {
                                   SizedBox(
                                       height: 90,
                                       width: 70,
-                                      child: Image.asset('assets/Images/electrician.png')),
+                                      child: Image.asset(
+                                          'assets/Images/electrician.png')),
                                   const Text('Electrician',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -792,30 +795,30 @@ class _MainScreenState extends State<MainScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                  height: 130,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(14),
-                                          topRight: Radius.circular(14))),
-                                          child: const Center(
-                                            child: 
-                                          Text("\"Lorem ipsum dolor sit amet consectetur. Volutpat \n ac egestas quis enim hendrerit\"",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 59, 59, 59)),
-                                          ),
-
-                                          ),
-                                          
-                                          
-                                          ),
+                                height: 130,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(14),
+                                        topRight: Radius.circular(14))),
+                                child: const Center(
+                                  child: Text(
+                                    "\"Lorem ipsum dolor sit amet consectetur. Volutpat \n ac egestas quis enim hendrerit\"",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color.fromARGB(255, 59, 59, 59)),
+                                  ),
+                                ),
+                              ),
                               Expanded(
                                 child: Container(
                                   width: 400,
-                                  
                                   decoration: const BoxDecoration(
                                     color: Color.fromARGB(255, 192, 107, 231),
-                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14), bottomRight: Radius.circular(14)),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(14),
+                                        bottomRight: Radius.circular(14)),
                                   ),
                                   child: Column(
                                       mainAxisAlignment:
@@ -823,11 +826,22 @@ class _MainScreenState extends State<MainScreen> {
                                       children: const [
                                         Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: Text("Mukul Nimker", style: TextStyle(color: Colors.white,fontSize: 17),),
+                                          child: Text(
+                                            "Mukul Nimker",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17),
+                                          ),
                                         ),
-                                        Text("CEO of Peity Services", style: TextStyle(color: Color.fromARGB(255, 78, 78, 78),fontSize: 15)),
-                                        SizedBox(height: 20,)
-                                        ]),
+                                        Text("CEO of Peity Services",
+                                            style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 78, 78, 78),
+                                                fontSize: 15)),
+                                        SizedBox(
+                                          height: 20,
+                                        )
+                                      ]),
                                 ),
                               )
                             ],
@@ -848,28 +862,27 @@ class _MainScreenState extends State<MainScreen> {
                 height: 160,
                 width: 400,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
+                    gradient: LinearGradient(colors: [
                       Color.fromARGB(255, 157, 54, 175),
                       Color.fromARGB(255, 0, 3, 153),
-                    ]
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 2,
-                    )]
+                    ]),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 2,
+                      )
+                    ]),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'We keep you &\n your laundary safe',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    Image.asset('assets/Images/washing.png')
+                  ],
                 ),
-              
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text('We keep you &\n your laundary safe', style: TextStyle(color: Colors.white, fontSize: 25),),
-                  Image.asset('assets/Images/washing.png')
-                ],
-              ),
-              
               ),
             )
           ],

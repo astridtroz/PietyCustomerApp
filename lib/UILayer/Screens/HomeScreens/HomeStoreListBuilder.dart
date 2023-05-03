@@ -296,9 +296,11 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                   MaterialPageRoute(
                                     builder: (context) => Material(
                                       child: FlutterLocationPicker(
-                                          initPosition: LatLong(position.latitude,
+                                          initPosition: LatLong(
+                                              position.latitude,
                                               position.longitude),
-                                          selectLocationButtonStyle: ButtonStyle(
+                                          selectLocationButtonStyle:
+                                              ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
                                                     Colors.blue),
@@ -316,16 +318,19 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                             print(pickedData.address);
                                             print(pickedData
                                                 .addressData['country']);
-                                            _pickedLocation = LatLng(pickedData.latLong.latitude, pickedData.latLong.longitude);
+                                            _pickedLocation = LatLng(
+                                                pickedData.latLong.latitude,
+                                                pickedData.latLong.longitude);
                                             if (_pickedLocation != null) {
                                               // print("Picked location:: " +
                                               //     _pickedLocation.address);
                                               // _userBloc.mapEventToState(
                                               //     SelectUserAddress(index: ));
-                                              _userBloc!.mapEventToState(AddAddressByLatLng(
-                                                  latLng: _pickedLocation!
-                                                // .latLng
-                                              ));
+                                              _userBloc!.mapEventToState(
+                                                  AddAddressByLatLng(
+                                                      latLng: _pickedLocation!
+                                                      // .latLng
+                                                      ));
                                             }
                                             setState(() {
                                               // print(_isSelected);
@@ -675,7 +680,6 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
               child: StreamBuilder<List<Store>>(
                 initialData: storeBloc!.getInitialStore,
                 stream: storeBloc!.storeTypeListStream,
-                
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Store>> snapshot) {
                   if (!snapshot.hasData) {
@@ -742,7 +746,8 @@ class _HomeStoreListBuilderState extends State<HomeStoreListBuilder> {
                                         loadedStores[count].storeCoordinates!,
                                     isLaundry: loadedStores[count].storeType ==
                                             "Laundry"
-                                        ? true : false,
+                                        ? true
+                                        : false,
                                     storeName: loadedStores[count].name!,
                                     storeAddress: loadedStores[count]
                                         .address!

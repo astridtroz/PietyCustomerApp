@@ -77,7 +77,11 @@ class FilterBasedStore extends StoreEvent {
   final double? rating;
   final String? categoryStore;
 
-  FilterBasedStore({ this.searchStoreName, required this.isRatingFilter,  this.rating, this.categoryStore});
+  FilterBasedStore(
+      {this.searchStoreName,
+      required this.isRatingFilter,
+      this.rating,
+      this.categoryStore});
 }
 
 // class GetCategoryListOfStore extends StoreEvent {
@@ -91,7 +95,7 @@ class SelectedStore extends StoreEvent {
   final String? selectedStore;
   final bool isFeatured;
   final String? storeName;
-  SelectedStore({ this.selectedStore, required this.isFeatured, this.storeName});
+  SelectedStore({this.selectedStore, required this.isFeatured, this.storeName});
   @override
   List<Object> get props => [selectedStore!];
 }

@@ -59,8 +59,8 @@ class StoreReview extends StatelessWidget {
                                   RatingBar.builder(
                                     itemSize: 20,
                                     initialRating: snapshot
-                                        .data![count].review!.rating
-                                        !.toDouble(),
+                                        .data![count].review!.rating!
+                                        .toDouble(),
                                     direction: Axis.horizontal,
                                     allowHalfRating: false,
                                     itemCount: 5,
@@ -72,10 +72,10 @@ class StoreReview extends StatelessWidget {
                                       print(rating);
                                     },
                                     ignoreGestures: true,
-                                    itemBuilder: (context,_) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
                                   ),
                                 ],
                               ),

@@ -46,8 +46,8 @@ class Auth implements AuthBase {
 
   @Deprecated("Use SignInMethods.phoneWithOTP instead")
   signInWithOTP(smsCode, verId) {
-    AuthCredential authCreds = PhoneAuthProvider.credential(
-        verificationId: verId, smsCode: smsCode);
+    AuthCredential authCreds =
+        PhoneAuthProvider.credential(verificationId: verId, smsCode: smsCode);
     signIn(authCreds);
   }
 }

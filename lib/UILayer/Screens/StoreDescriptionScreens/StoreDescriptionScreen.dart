@@ -645,7 +645,7 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen>
                                                                                                   return Text("Something went wrong in Cate");
                                                                                                 } else {
                                                                                                   List<String> items = snapshot.data!;
-                                                                                                  print(items.toString());
+                                                                                                  // print(items.toString());
                                                                                                   if (!items.contains("All")) {
                                                                                                     items.add("All");
                                                                                                   }
@@ -790,7 +790,7 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen>
                                                                               .hasError) {
                                                                             return Text("Something went wrong.");
                                                                           } else {
-                                                                            print("Offers is : ${snapshot.data!.offers?.length}");
+                                                                            // print("Offers is : ${snapshot.data!.offers?.length}");
                                                                             List<Offer>
                                                                                 offers =
                                                                                 snapshot.data!.offers!;
@@ -1449,7 +1449,8 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen>
 
   List<DropdownMenuItem<String>>? items = [];
 
-  Widget buildSearchWidget(List<RateListItem> fetchedList, BuildContext context){
+  Widget buildSearchWidget(
+      List<RateListItem> fetchedList, BuildContext context) {
     List<String> services;
     services = fetchedList.map((item) => item.serviceName!).toList();
     services.add("All");

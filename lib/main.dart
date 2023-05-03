@@ -31,7 +31,7 @@ void main() async {
   NotificationHandler _notificationHandler = NotificationHandler();
 
   CloudMessaging _cloudMessaging =
-  CloudMessaging.withNotification(_notificationHandler);
+      CloudMessaging.withNotification(_notificationHandler);
   Constants.fcmToken = await _cloudMessaging.getToken();
   print("FCM TOKEN: ${Constants.fcmToken}");
   SystemChrome.setPreferredOrientations(
@@ -41,15 +41,12 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     return StreamProvider<ConnectivityStatus>(
       initialData: ConnectivityStatus.online,
       create: (BuildContext context) =>
-      ConnectivityService().connectionStatusController.stream,
+          ConnectivityService().connectionStatusController.stream,
       child: BlocProvider<AdminBloc>(
         bloc: AdminBloc(),
         child: BlocProvider(

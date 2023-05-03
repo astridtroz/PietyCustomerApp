@@ -16,7 +16,8 @@ class NotificationHandler {
     androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
     iOSSetting = DarwinInitializationSettings(
         onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
-    initializationSettings = InitializationSettings(android: androidSetting, iOS: iOSSetting);
+    initializationSettings =
+        InitializationSettings(android: androidSetting, iOS: iOSSetting);
     _initialize();
     // _initializeChannelSpecific();
   }
@@ -66,7 +67,8 @@ class NotificationHandler {
     DarwinNotificationDetails iOSPlatformChannelSpecifics =
         DarwinNotificationDetails();
     NotificationDetails notificationDetails = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
     return notificationDetails;
   }
 
@@ -95,4 +97,3 @@ class NotificationHandler {
     //TODO: iOS notifcation implementation
   }
 }
-

@@ -49,11 +49,14 @@ class CustomContainer extends StatelessWidget {
                 child: Text("Something went Wrong"),
               );
             } else {
-              double distanceInMeters = GeolocatorPlatform.instance.bearingBetween(
-                snapshot.data!.latitude,
+              double distanceInMeters = GeolocatorPlatform.instance
+                  .bearingBetween(
+                    snapshot.data!.latitude,
                     snapshot.data!.longitude,
-                storeLocation.latitude, storeLocation.longitude,
-              ).toDouble();
+                    storeLocation.latitude,
+                    storeLocation.longitude,
+                  )
+                  .toDouble();
               return Container(
                 //height: 120,
                 margin: const EdgeInsets.only(
@@ -71,11 +74,10 @@ class CustomContainer extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child:
-                          Image.asset(
-                            "assets/Images/machine.png",
-                            fit: BoxFit.contain,
-                          ),
+                      child: Image.asset(
+                        "assets/Images/machine.png",
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     SizedBox(width: 10),
                     Container(
@@ -129,7 +131,8 @@ class CustomContainer extends StatelessWidget {
                                   SizedBox(
                                     width: 3,
                                   ),
-                                  Text("${(distanceInMeters / 1000).toString().substring(0, 4)} KM"),
+                                  Text(
+                                      "${(distanceInMeters / 1000).toString().substring(0, 4)} KM"),
                                 ],
                               ),
                             ],
@@ -205,5 +208,4 @@ class CustomContainer extends StatelessWidget {
           }
         });
   }
-
 }

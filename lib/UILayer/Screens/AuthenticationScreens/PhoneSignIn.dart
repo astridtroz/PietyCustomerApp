@@ -67,12 +67,11 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Expanded(
-                                      child:
-
-                                      TextFormField(
+                                      child: TextFormField(
                                         autofocus: true,
                                         focusNode: _phoneFocus,
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
                                         controller: _phoneNumberController,
                                         maxLength: 10,
                                         keyboardType: TextInputType.phone,

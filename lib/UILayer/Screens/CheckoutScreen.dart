@@ -709,9 +709,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     //     int.parse(_numberOfClothesController.text),
                                   );
                                   _orderBloc!.createOrderSink.add(newOrder);
-                                  // print(newOrder.toString());
+
                                   _orderBloc!.mapEventToState(
                                       CreateOrder(order: newOrder));
+                                  print("new order" + newOrder.toString());
                                 } else {
                                   List<Location> location =
                                       await locationFromAddress(_userBloc!
@@ -719,19 +720,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           .toString());
                                   var latx = location[0];
                                   UserAddress orderAddress = UserAddress(
-                                      city: _userBloc!
-                                          .getSelectedUserAddress?.city,
-                                      name: name,
-                                      postalCode: _userBloc!
-                                          .getSelectedUserAddress?.postalCode,
-                                      state: _userBloc!
-                                          .getSelectedUserAddress?.state,
-                                      houseNo: _userBloc!
-                                          .getSelectedUserAddress?.houseNo,
-                                      landmark: _userBloc!
-                                          .getSelectedUserAddress?.landmark,
-                                      locality: _userBloc!
-                                          .getSelectedUserAddress?.locality);
+                                    city:
+                                        _userBloc!.getSelectedUserAddress?.city,
+                                    name: name,
+                                    postalCode: _userBloc!
+                                        .getSelectedUserAddress?.postalCode,
+                                    state: _userBloc!
+                                        .getSelectedUserAddress?.state,
+                                    houseNo: _userBloc!
+                                        .getSelectedUserAddress?.houseNo,
+                                    landmark: _userBloc!
+                                        .getSelectedUserAddress?.landmark,
+                                    locality: _userBloc!
+                                        .getSelectedUserAddress?.locality,
+                                    addressType: AddressType.home,
+                                  );
+                                  // UserAddress orderAddress = UserAddress(
+                                  //   city: "Delhi",
+                                  //   name: name,
+                                  //   postalCode: "110027",
+                                  //   state: "Delhi",
+                                  //   houseNo: "101",
+                                  //   landmark: "Rajauri garden",
+                                  //   locality: "delhi",
+                                  // );
                                   newOrder = Order(
                                     orderPlacingDate: DateTime.now(),
                                     orderStatus:
@@ -787,7 +799,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   _orderBloc!.mapEventToState(
                                       CreateOrder(order: newOrder));
                                 }
-                                Navigator.of(context).pop();
+                                // Navigator.of(context).pop();
                               },
                       ),
                     )

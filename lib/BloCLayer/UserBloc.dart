@@ -171,7 +171,6 @@ class UserBloc extends Bloc {
       });
     } else if (event is GetUserLocation) {
       if (await Permission.location.request().isGranted) {
-        
         print("Event is ${event.toString()}");
         Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
             .then((Position position) {

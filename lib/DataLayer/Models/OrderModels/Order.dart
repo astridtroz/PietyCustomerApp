@@ -96,6 +96,7 @@ class Order {
 
   Order.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     // Store related
+    this.orderId = snapshot.id.toString();
     this.fcmStore =
         List<String>.from(snapshot.data()!["fcmStore"] ?? ["Not-available"]);
     this.fcmUser = snapshot.data()!["fcmUser"] ?? "Not-available";
@@ -233,7 +234,7 @@ class Order {
       "userId": this.userId,
       "userName": this.userName,
       "userCoordinates": this.userCoordinates?.toJson(),
-      "userAddress": this.userAddress?.toJson(),
+      "userAddress": this.userAddress!.toJson(),
       "userPhoneNumber": this.userPhoneNumber?.toJson(),
       "userReview": this.userReview?.toJson(),
       "fcmUser": this.fcmUser,

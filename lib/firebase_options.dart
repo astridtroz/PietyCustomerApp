@@ -69,8 +69,10 @@ class DefaultFirebaseOptions {
     projectId: 'mypiety-9a56c',
     databaseURL: 'https://mypiety-9a56c.firebaseio.com',
     storageBucket: 'mypiety-9a56c.appspot.com',
-    androidClientId: '282805273447-03ijur9nirat8ikmchcqfsjqkrv6inkm.apps.googleusercontent.com',
-    iosClientId: '282805273447-03nc73mpp49f0j4i8b8tmgrqeah90chn.apps.googleusercontent.com',
+    androidClientId:
+        '282805273447-03ijur9nirat8ikmchcqfsjqkrv6inkm.apps.googleusercontent.com',
+    iosClientId:
+        '282805273447-03nc73mpp49f0j4i8b8tmgrqeah90chn.apps.googleusercontent.com',
     iosBundleId: 'com.example.pietycustomer',
   );
 
@@ -81,8 +83,10 @@ class DefaultFirebaseOptions {
     projectId: 'mypiety-9a56c',
     databaseURL: 'https://mypiety-9a56c.firebaseio.com',
     storageBucket: 'mypiety-9a56c.appspot.com',
-    androidClientId: '282805273447-03ijur9nirat8ikmchcqfsjqkrv6inkm.apps.googleusercontent.com',
-    iosClientId: '282805273447-03nc73mpp49f0j4i8b8tmgrqeah90chn.apps.googleusercontent.com',
+    androidClientId:
+        '282805273447-03ijur9nirat8ikmchcqfsjqkrv6inkm.apps.googleusercontent.com',
+    iosClientId:
+        '282805273447-03nc73mpp49f0j4i8b8tmgrqeah90chn.apps.googleusercontent.com',
     iosBundleId: 'com.example.pietycustomer',
   );
 }

@@ -44,6 +44,10 @@ class UserAddress {
   }
 
   Map<String, dynamic> toJson() {
+    // final addressType = this.addressType != null
+    //     ? Enum2String.getAddressType(this.addressType!)
+    //     : AddressType.unknown;
+    // print("address type" + addressType.toString());
     return {
       "name": this.name,
       "houseNo": this.houseNo,
@@ -52,7 +56,8 @@ class UserAddress {
       "locality": this.locality,
       "state": this.state,
       "postalCode": this.postalCode,
-      "addressType": Enum2String.getAddressType(this.addressType!),
+      "addressType":
+          Enum2String.getAddressType(this.addressType ?? AddressType.unknown),
     };
   }
 

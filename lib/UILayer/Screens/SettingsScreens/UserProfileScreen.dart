@@ -63,7 +63,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       radius: 40,
                                       child: Text(
                                         snapshot.data!.name!.isNotEmpty
-                                            ? snapshot.data!.name!.substring(0, 1)
+                                            ? snapshot.data!.name!
+                                                .substring(0, 1)
                                             : "U",
                                       ),
                                     ),
@@ -116,7 +117,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         thickness: 1.0,
                       ),
                       SizedBox(height: 20),
-                      StreamBuilder<dynamic>(   // List<UserAddress> is replaced by dynamic while making runnable
+                      StreamBuilder<dynamic>(
+                        // List<UserAddress> is replaced by dynamic while making runnable
                         initialData: _userBloc!.getUserAllAddress,
                         stream: _userBloc!.allAddressStream,
                         builder: (context, snapshot) {
@@ -495,8 +497,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                           "Name"),
                                                                   validator:
                                                                       (val) {
-                                                                    if (val
-                                                                        !.isEmpty) {
+                                                                    if (val!
+                                                                        .isEmpty) {
                                                                       return "";
                                                                     } else {
                                                                       return null;
@@ -520,8 +522,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                             InputDecoration(labelText: "House No"),
                                                                         validator:
                                                                             (val) {
-                                                                          if (val
-                                                                              !.isEmpty) {
+                                                                          if (val!
+                                                                              .isEmpty) {
                                                                             return "";
                                                                           } else {
                                                                             return null;
@@ -560,8 +562,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                             InputDecoration(labelText: "Locality"),
                                                                         validator:
                                                                             (val) {
-                                                                          if (val
-                                                                              !.isEmpty) {
+                                                                          if (val!
+                                                                              .isEmpty) {
                                                                             return "";
                                                                           } else {
                                                                             return null;
@@ -581,8 +583,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                             InputDecoration(labelText: "City"),
                                                                         validator:
                                                                             (val) {
-                                                                          if (val
-                                                                              !.isEmpty) {
+                                                                          if (val!
+                                                                              .isEmpty) {
                                                                             return "";
                                                                           } else {
                                                                             return null;
@@ -609,8 +611,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                             InputDecoration(labelText: "State"),
                                                                         validator:
                                                                             (val) {
-                                                                          if (val
-                                                                              !.isEmpty) {
+                                                                          if (val!
+                                                                              .isEmpty) {
                                                                             return "";
                                                                           } else {
                                                                             return null;
@@ -632,8 +634,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                             TextInputType.number,
                                                                         validator:
                                                                             (val) {
-                                                                          if (val
-                                                                              !.isEmpty) {
+                                                                          if (val!
+                                                                              .isEmpty) {
                                                                             return "";
                                                                           } else {
                                                                             return null;
@@ -671,8 +673,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                                         if (_addressType !=
                                                                             null) {
                                                                           if (_addressForm
-                                                                              .currentState
-                                                                              !.validate()) {
+                                                                              .currentState!
+                                                                              .validate()) {
                                                                             UserAddress
                                                                                 _newAddres =
                                                                                 UserAddress(

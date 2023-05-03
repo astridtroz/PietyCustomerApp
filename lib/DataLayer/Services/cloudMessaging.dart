@@ -48,17 +48,17 @@ class CloudMessaging {
   }
 
   void _requestPermission() {
-    _firebaseMessaging!.requestPermission(
-      // const IosNotificationSettings(
-        sound: true,
-        badge: true,
-        alert: true,
-        provisional: true,
+    _firebaseMessaging!
+        .requestPermission(
+          // const IosNotificationSettings(
+          sound: true,
+          badge: true,
+          alert: true,
+          provisional: true,
 
-      // ),
-    ).whenComplete(() =>
-        print("Settings registeration: completed")
-    );
+          // ),
+        )
+        .whenComplete(() => print("Settings registeration: completed"));
     // _firebaseMessaging!.onIosSettingsRegistered
     //     .listen((IosNotificationSettings settings) {
     //   print("Settings registered: $settings");
