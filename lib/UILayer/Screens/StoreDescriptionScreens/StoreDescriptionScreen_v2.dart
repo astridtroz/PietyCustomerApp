@@ -9,7 +9,9 @@ import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/shape/gf_button_shape.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
 import 'package:search_choices/search_choices.dart';
+import '../CheckoutScreenV2.dart';
 import '/BloCLayer/OrderBloc.dart';
 import '/DataLayer/Models/Other/Enums.dart';
 import '/DataLayer/Models/StoreModels/Offer.dart';
@@ -27,7 +29,6 @@ import './StoreTimingsText.dart';
 import '../../../BloCLayer/StoreBloc.dart';
 import '../../../BloCLayer/StoreEvent.dart';
 import '../../../DataLayer/Models/StoreModels/Store.dart';
-import '../CheckoutScreen.dart';
 
 class StoreDescriptionScreen extends StatefulWidget {
   static String route = "store_description_screen";
@@ -991,7 +992,7 @@ class _StoreDescriptionScreenState extends State<StoreDescriptionScreen> {
                                                                             item.imageUrl!,
                                                                             toAdd,
                                                                             context,
-                                                                            _numberOfItems![item.serviceName!]!);
+                                                                            _numberOfItems[item.serviceName!]!);
                                                                         cards.add(
                                                                             card);
                                                                       }

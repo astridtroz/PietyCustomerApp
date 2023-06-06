@@ -6,6 +6,7 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 

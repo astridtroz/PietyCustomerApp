@@ -227,10 +227,10 @@ class UserBloc extends Bloc {
       }
     } else if (event is GetUserDetails) {
       await FirebaseAuth.instance.authStateChanges().listen((user) async {
-        await user?.getIdToken()?.then((token) async {
+        await user?.getIdToken().then((token) async {
           FirebaseFirestore.instance
               .collection("customers")
-              .doc(user?.uid)
+              .doc(user.uid)
               .snapshots()
               .listen((DocumentSnapshot snapshot) {
             _userAddressList = [];
@@ -240,14 +240,14 @@ class UserBloc extends Bloc {
               mapEventToState(GetUserLocation());
             } else {
               print("Else Part call");
+              for (var i = 0; i < newUser.addresses!.length; i++) {
+                _userAddressList!.add(newUser.addresses![i]);
+              }
+              allAddressSink.add(_userAddressList);
+              // print(newUser.toString());
+              _user = newUser;
+              getUserSink.add(newUser);
             }
-            for (var i = 0; i < newUser.addresses!.length; i++) {
-              _userAddressList!.add(newUser.addresses![i]);
-            }
-            allAddressSink.add(_userAddressList);
-            // print(newUser.toString());
-            _user = newUser;
-            getUserSink.add(newUser);
           });
         });
       });

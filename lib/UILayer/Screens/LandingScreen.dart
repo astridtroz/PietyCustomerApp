@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'HomeScreens/HomeScreen.dart';
+import 'HomeScreens/HomeScreen_v2.dart';
 import 'ReferScreen.dart';
 import 'SettingsScreens/SettingsScreen.dart';
 import 'TrackOrderScreens/TrackOrdersScreen.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
+import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
 import 'package:pietycustomer/BloCLayer/UserEvent.dart';
 import 'package:provider/provider.dart';
 

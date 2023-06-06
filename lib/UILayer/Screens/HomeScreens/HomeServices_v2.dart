@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
+import 'package:pietycustomer/UILayer/Screens/HomeScreens/HomeStoreListBuilderV2.dart';
 
 import '/BloCLayer/StoreBloc.dart';
 import '/BloCLayer/StoreEvent.dart';
@@ -110,7 +112,7 @@ class _HomeServicesState extends State<HomeServices> {
                                             MaterialPageRoute(
                                                 builder: (BuildContext
                                                         context) =>
-                                                    HomeStoreListBuilder()));
+                                                    HomeStoreListBuilderV2()));
                                       },
                                       child: ServiceChip(
                                         imageUrl: snapshot.data![index].icon!,

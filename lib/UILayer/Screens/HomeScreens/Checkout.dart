@@ -379,7 +379,7 @@ class _CheckoutState extends State<Checkout> {
                                                   EdgeInsets.only(left: 8.0),
                                               child: Text('Wash & Fold',
                                                   style:
-                                                      TextStyle(fontSize: 21)),
+                                                      TextStyle(fontSize: 21),),
                                             ),
                                           ]),
                                       Row(
@@ -574,7 +574,8 @@ class _CheckoutState extends State<Checkout> {
             children: [
               Expanded(
                 child: Text(
-                    'Check all the clothes after reciveing infront of delivery partner.'),
+                  'Check all the clothes after receiving in front of delivery partner.',
+                ),
               ),
               Container(
                 width: 100,
