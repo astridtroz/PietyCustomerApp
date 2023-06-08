@@ -137,6 +137,7 @@ class OrderBloc extends Bloc {
           _currentOrders.add(Order.fromSnapshot(snapshot.docs[i]
               as cloud.QueryDocumentSnapshot<Map<String, dynamic>>));
         }
+        print("Current orders: " + _currentOrders.toString());
         _currentOrderSink.add(_currentOrders);
         // List<Order> _currentOrder = List<Order>(_length);
         // for (int i = 0; i < _length; i++) {

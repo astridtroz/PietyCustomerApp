@@ -134,6 +134,7 @@ class Enum2String {
   /// FirebaseFirestore to get all the ongoing orders.
   static List<String> ongoingOrderPossibilities() {
     return [
+      Enum2String.getOrderStatus(OrderStatus.awaitingConfirmation),
       Enum2String.getOrderStatus(OrderStatus.outForDelivery),
       Enum2String.getOrderStatus(OrderStatus.cleaned),
       Enum2String.getOrderStatus(OrderStatus.inProcess),

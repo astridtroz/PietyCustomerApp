@@ -80,38 +80,42 @@ class _CurrentOrderState extends State<CurrentOrder> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
-                  child: CircularPercentIndicator(
-                    radius: 175.0,
-                    lineWidth: 7.0,
-                    animation: true,
-                    percent: CircularIndicator()!,
-                    center: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "${Enum2String.getOrderStatus(widget.order.orderStatus!)}",
-                          style: GoogleFonts.openSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.0,
-                            // color: Colors.black45,
-                          ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20.0, bottom: 20.0),
+                    child: Expanded(
+                      child: CircularPercentIndicator(
+                        radius: 105.0,
+                        lineWidth: 7.0,
+                        animation: true,
+                        percent: CircularIndicator()!,
+                        center: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "${Enum2String.getOrderStatus(widget.order.orderStatus!)}",
+                              style: GoogleFonts.openSans(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.0,
+                                // color: Colors.black45,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              "${Constants.toFancyDate(widget.order.orderPlacingDate!)}",
+                              style: GoogleFonts.openSans(
+                                fontSize: 13.0,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          "${Constants.toFancyDate(widget.order.orderPlacingDate!)}",
-                          style: GoogleFonts.openSans(
-                            fontSize: 13.0,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ],
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: Colors.blueGrey,
+                      ),
                     ),
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: Colors.blueGrey,
                   ),
                 ),
                 SizedBox(

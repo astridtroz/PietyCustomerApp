@@ -52,7 +52,7 @@ class Order {
   String? storeType;
   List<String>? fcmStore;
 
-  List<String>? services;
+  List<String> services = [];
   List<Item>? items;
 
   //==========Implicit Parameters==========//
@@ -185,7 +185,7 @@ class Order {
               offer: 0,
               offerCode: "null",
             ))
-        : Price.fromMap(snapshot.data()!["price"], this.services!);
+        : Price.fromMap(snapshot.data()!["price"], this.services);
     auditTrail = [];
     for (int i = 0; i < snapshot.data()!["auditTrail"].length; i++) {
       auditTrail?.add(Activity.fromMap(snapshot.data()!["auditTrail"][i]));
@@ -197,11 +197,11 @@ class Order {
     for (int i = 0; i < _length; i++) {
       payments?.add(Payment.fromMap(snapshot.data()!["payment"][i]));
     }
-    services = [];
+    this.services = [];
     if (snapshot.data()!["services"] != null &&
         !snapshot.data()!["services"].isEmpty) {
       for (int i = 0; i < snapshot.data()!["services"].length; i++) {
-        services?.add(snapshot.data()!["services"][i]);
+        services.add(snapshot.data()!["services"][i]);
       }
     }
 
