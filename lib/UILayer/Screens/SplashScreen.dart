@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
+import 'package:pietycustomer/UILayer/Screens/HomeScreens/HomePage.dart';
 
 import '/BloCLayer/AdminBloc.dart';
 import '/BloCLayer/StoreBloc.dart';
@@ -25,7 +26,6 @@ class _SplashScreenState extends State<SplashScreen>
   AdminBloc? _adminBloc;
   StoreBloc? _storeBloc;
   UserBloc? _userBloc;
-  bool _isLoading = true;
 
   startTime() async {
     var _duration = new Duration(seconds: 2);
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
   void _navigate() async {
     if (!mounted) return;
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LandingScreen()));
+        context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   @override

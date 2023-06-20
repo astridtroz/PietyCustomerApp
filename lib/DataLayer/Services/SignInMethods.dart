@@ -95,7 +95,7 @@ class SignInMethods {
   }) async {
     try {
       AuthCredential authCredentials = PhoneAuthProvider.credential(
-        verificationId: _phoneVerificationID!,
+        verificationId: _phoneVerificationID,
         smsCode: otp!,
       );
       UserCredential res =

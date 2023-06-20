@@ -82,7 +82,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                         validator: (value) {
                                           if (value!.isEmpty) {
                                             return "Please enter your phone number";
-                                          } else if (value!.length != 10) {
+                                          } else if (value.length != 10) {
                                             return "Please enter 10 digits";
                                           } else {
                                             return null;
@@ -165,7 +165,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                                         validator: (value) {
                                           if (value!.isEmpty) {
                                             return "Please enter OTP";
-                                          } else if (value!.length != 6) {
+                                          } else if (value.length != 6) {
                                             return "Incomplete OTP";
                                           } else {
                                             return null;

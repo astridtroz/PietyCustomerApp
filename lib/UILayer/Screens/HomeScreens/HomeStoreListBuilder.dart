@@ -12,15 +12,13 @@ import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
+import '../StoreDescriptionScreens/StoreDescriptionScreen_v2.dart';
 import '/BloCLayer/StoreEvent.dart';
 import '/BloCLayer/UserBloc.dart';
 import '/BloCLayer/UserEvent.dart';
 import '/DataLayer/Models/UserModels/User.dart';
 import '/DataLayer/Models/UserModels/UserAddress.dart';
-import '../../../BloCLayer/StoreBloc.dart';
 import '../../../DataLayer/Models/StoreModels/Store.dart';
-import '../../../const.dart';
 import '../../Widgets/CustomContainer.dart';
 import '../StoreDescriptionScreens/StoreDescriptionScreen.dart';
 

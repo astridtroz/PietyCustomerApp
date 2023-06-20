@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
+import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
+import 'package:pietycustomer/BloCLayer/StoreEvent.dart';
+import 'package:pietycustomer/BloCLayer/UserBloc.dart';
+import 'package:pietycustomer/BloCLayer/UserEvent.dart';
+import 'package:pietycustomer/DataLayer/Models/UserModels/User.dart';
+import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
+import 'package:pietycustomer/UILayer/Screens/HomeScreens/HomeStoreListBuilder.dart';
 
 TextEditingController _controller = TextEditingController();
 
 class Home extends StatefulWidget {
+  static String route = "home";
   const Home({super.key});
 
   @override
@@ -19,6 +31,23 @@ class _HomeState extends State<Home> {
     const Profile()
   ];
 
+  LatLng? _pickedLocation;
+  var _isSelected = false;
+  double rating = 3;
+  int selectedAddress = 0;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = const MainScreen();
 
@@ -29,22 +58,25 @@ class _HomeState extends State<Home> {
         bucket: bucket,
         child: currentScreen,
       ),
-      floatingActionButton: Container(
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-                width: 5, color: const Color.fromARGB(134, 80, 182, 84))),
-        child: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 80, 182, 83),
-          elevation: 10,
-          child: const Icon(
-            Icons.shopping_bag_outlined,
-            size: 30,
-            color: Colors.white,
+      floatingActionButton: Visibility(
+        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+        child: Container(
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                  width: 5, color: const Color.fromARGB(134, 80, 182, 84))),
+          child: FloatingActionButton(
+            backgroundColor: const Color.fromARGB(255, 80, 182, 83),
+            elevation: 10,
+            child: const Icon(
+              Icons.shopping_bag_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            onPressed: () {},
           ),
-          onPressed: () {},
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -192,9 +224,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  LatLng? _pickedLocation;
+  var _isSelected = false;
+  double rating = 3;
+  int selectedAddress = 0;
   @override
   Widget build(BuildContext context) {
-    _controller.text = "Delhi,Gurgaon,Sector14";
+    StoreBloc storeBloc = BlocProvider.of<StoreBloc>(context);
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+    // User2 user = userBloc.getUser;
+    // String add = userBloc.getSelectedUserAddress.toString();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 134, 4),
@@ -203,37 +242,376 @@ class _MainScreenState extends State<MainScreen> {
                 bottomLeft: Radius.circular(12),
                 bottomRight: Radius.circular(12))),
         title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text(
-            'Hello, Mukul',
-            style: TextStyle(color: Colors.white, fontSize: 31),
-          ),
-          const Text(
-            'Your Local Name',
-            style: TextStyle(color: Colors.white54),
+          Row(
+            children: [
+              const Text(
+                'Hello, ',
+                style: TextStyle(color: Colors.white, fontSize: 31),
+              ),
+              StreamBuilder<User2>(
+                  stream: userBloc.getUserStream,
+                  initialData: userBloc.getUser,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(
+                        snapshot.data != null
+                            ? snapshot.data!.name.toString()
+                            : 'Guest',
+                        style: TextStyle(color: Colors.white, fontSize: 31),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        'Guest',
+                        style: TextStyle(color: Colors.white, fontSize: 31),
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
+            child: const Text(
+              'Your Location',
+              style: TextStyle(color: Colors.white54),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 2.0,
+              right: 0.0,
+            ),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.location_pin,
-                    color: Colors.white,
+                  Center(
+                    child: const Icon(
+                      Icons.location_pin,
+                      color: Colors.white,
+                      // size: 35,
+                    ),
                   ),
+                  StreamBuilder<UserAddress>(
+                      stream: userBloc.selectedAddressStream,
+                      initialData: userBloc.getSelectedUserAddress,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return SizedBox(
+                            height: 40,
+                            width: 180,
+                            child: Center(
+                              child: Text(
+                                snapshot.data!.displayAddress().toString(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        } else{
+                          return SizedBox(
+                            height: 40,
+                            width: 180,
+                            child: Center(
+                              child: Text(
+                                "Select your location",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        }
+                      }),
                   SizedBox(
                     height: 40,
-                    width: 200,
-                    child: TextFormField(
-                      controller: _controller,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white))),
+                    child: IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Card(
+                                margin: const EdgeInsets.all(8.0),
+                                elevation: 5,
+                                child: Container(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.45,
+                                  padding: EdgeInsets.only(
+                                    top: 10,
+                                    left: 10,
+                                    right: 10,
+                                    bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom +
+                                        10,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        "Change Delivery Location",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15.0),
+                                      ),
+                                      Text(
+                                        "Select a delivery location to see Store Availability",
+                                        style: TextStyle(
+                                          color: Colors.grey[700],
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+                                      StatefulBuilder(
+                                        builder: (BuildContext context,
+                                                StateSetter mySetState) =>
+                                            StreamBuilder<User2>(
+                                          initialData: userBloc.getUser,
+                                          stream: userBloc.getUserStream,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              if (snapshot.hasError) {
+                                                return Text(
+                                                    "Something went wrong");
+                                              } else {
+                                                // savedAddress = snapshot.data.addresses;
+                                                return Container(
+                                                  width: double.infinity,
+                                                  height: 100,
+                                                  child: ListView.separated(
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    primary: false,
+                                                    physics:
+                                                        ClampingScrollPhysics(),
+                                                    // reverse: true,
+                                                    separatorBuilder:
+                                                        (context, count) {
+                                                      return SizedBox(width: 5);
+                                                    },
+                                                    itemCount: snapshot.data!
+                                                        .addresses!.length,
+                                                    itemBuilder:
+                                                        (context, count) {
+                                                      // print(snapshot.data);
+                                                      return Card(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      12.0),
+                                                        ),
+                                                        elevation: 2,
+                                                        margin: const EdgeInsets
+                                                            .all(5.0),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      12.0),
+                                                          child: InkWell(
+                                                            splashColor: Colors
+                                                                .amberAccent,
+                                                            onTap: () {
+                                                              mySetState(() {
+                                                                _isSelected =
+                                                                    !_isSelected;
+                                                                // _selectedIndex = count;
+                                                                selectedAddress =
+                                                                    count;
+                                                                setUserLocationIndex(
+                                                                    count);
+                                                              });
+
+                                                              userBloc.mapEventToState(
+                                                                  SelectUserAddress(
+                                                                      index:
+                                                                          count));
+
+                                                              // print(
+                                                              //     "Index is : $selectedAddress");
+                                                            },
+                                                            child: StreamBuilder<
+                                                                UserAddress>(
+                                                              stream: userBloc
+                                                                  .selectedAddressStream,
+                                                              initialData: userBloc
+                                                                  .getSelectedUserAddress,
+                                                              builder: (context,
+                                                                  selectedAddress) {
+                                                                if (snapshot
+                                                                    .hasData) {
+                                                                  if (snapshot
+                                                                      .hasError) {
+                                                                    return Center(
+                                                                        child: Text(
+                                                                            "Something went wrong"));
+                                                                  } else {
+                                                                    return Container(
+                                                                      color: selectedAddress.data ==
+                                                                              snapshot.data!.addresses![
+                                                                                  count]
+                                                                          ? Colors
+                                                                              .amber
+                                                                          : Colors
+                                                                              .white,
+                                                                      width:
+                                                                          100.0,
+                                                                      height:
+                                                                          100.0,
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            FittedBox(
+                                                                          child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: <Widget>[
+                                                                              Text(
+                                                                                "${snapshot.data!.addresses![count].locality}",
+                                                                                style: TextStyle(
+                                                                                  fontSize: 18,
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                              Text(
+                                                                                "${snapshot.data!.addresses![count].city} , ${snapshot.data!.addresses![count].state}",
+                                                                                style: TextStyle(
+                                                                                  fontSize: 15,
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                              Text(
+                                                                                "${snapshot.data!.addresses![count].postalCode} ",
+                                                                                style: TextStyle(
+                                                                                  fontSize: 15,
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                }
+                                                                return Center(
+                                                                    child: Text(
+                                                                        "No Address Found"));
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              }
+                                            } else {
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      TextButton.icon(
+                                        icon: Icon(
+                                          Icons.location_searching,
+                                          size: 15.0,
+                                        ),
+                                        label: Text("Add Another location",
+                                            style: TextStyle(fontSize: 15.0)),
+                                        onPressed: () async {
+                                          Position position = await Geolocator
+                                              .getCurrentPosition(
+                                                  desiredAccuracy:
+                                                      LocationAccuracy.high);
+                                          _pickedLocation =
+                                              await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Material(
+                                                child: FlutterLocationPicker(
+                                                    initPosition: LatLong(
+                                                        position.latitude,
+                                                        position.longitude),
+                                                    selectLocationButtonStyle:
+                                                        ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(Colors.blue),
+                                                    ),
+                                                    selectLocationButtonText:
+                                                        'Set Current Location',
+                                                    initZoom: 11,
+                                                    minZoomLevel: 5,
+                                                    maxZoomLevel: 16,
+                                                    trackMyPosition: true,
+                                                    onError: (e) => print(e),
+                                                    onPicked: (pickedData) {
+                                                      print(pickedData
+                                                          .latLong.latitude);
+                                                      print(pickedData
+                                                          .latLong.longitude);
+                                                      print(pickedData.address);
+                                                      print(pickedData
+                                                              .addressData[
+                                                          'country']);
+                                                      _pickedLocation = LatLng(
+                                                          pickedData
+                                                              .latLong.latitude,
+                                                          pickedData.latLong
+                                                              .longitude);
+                                                      if (_pickedLocation !=
+                                                          null) {
+                                                        userBloc.mapEventToState(
+                                                            AddAddressByLatLng(
+                                                                latLng:
+                                                                    _pickedLocation!
+                                                                // .latLng
+                                                                ));
+                                                      }
+                                                      setState(() {
+                                                        _isSelected = false;
+                                                      });
+                                                      Navigator.pop(context);
+                                                    }),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                      ),
+                      splashRadius: 20.0,
                     ),
-                  )
+                  ),
                 ]),
           ),
           Padding(
@@ -246,15 +624,28 @@ class _MainScreenState extends State<MainScreen> {
                   color: Colors.white),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          label: Text('Search Laundry and More'),
+                  Center(
+                    child: SizedBox(
+                      width: 200,
+                      height: 45,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            textAlign: TextAlign.start,
+                            controller: _controller,
+                            keyboardType: TextInputType.name,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Search Laundry and More',
+                            ),
+                            autofocus: false,
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -299,168 +690,252 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(18.0),
-                    child: Text('Top Services', style: TextStyle(fontSize: 27)),
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                height: 70,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [BoxShadow(blurRadius: 5)],
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Image.asset(
-                                    'assets/icons/Wash_Fold.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Wash & Fold'),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                height: 70,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [BoxShadow(blurRadius: 5)],
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    'assets/icons/ironing.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Wash & Iron'),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                height: 70,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [BoxShadow(blurRadius: 5)],
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/icons/Dry_Cleaning.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Dry Cleaning'),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                height: 70,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [BoxShadow(blurRadius: 5)],
-                                    shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    'assets/icons/Carpet_Cleaning.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Carpet Clean'),
-                              ),
-                            ],
-                          ),
-                        ],
+                    child: Text(
+                      'Top Services',
+                      style: TextStyle(
+                        fontSize: 27,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 18.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 250,
+                    child: Column(
+                      children: [
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                Container(
-                                  height: 70,
-                                  width: 100,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [BoxShadow(blurRadius: 5)],
-                                      shape: BoxShape.circle),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                      'assets/icons/Laundary.png',
-                                      fit: BoxFit.contain,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        HomeStoreListBuilder()));
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 70,
+                                    width: 100,
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [BoxShadow(blurRadius: 7)],
+                                        shape: BoxShape.circle),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Image.asset(
+                                        'assets/Images/clean.png',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Laudary\nPremium',
-                                    textAlign: TextAlign.center,
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Wash & Fold'),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  height: 70,
-                                  width: 100,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [BoxShadow(blurRadius: 5)],
-                                      shape: BoxShape.circle),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                      'assets/icons/Sofa_Clean.png',
-                                      fit: BoxFit.contain,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        HomeStoreListBuilder()));
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 70,
+                                    width: 100,
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [BoxShadow(blurRadius: 7)],
+                                        shape: BoxShape.circle),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'assets/Images/ironing.png',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Sofa\nCleaning',
-                                    textAlign: TextAlign.center,
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Wash & Iron'),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        HomeStoreListBuilder()));
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 70,
+                                    width: 100,
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [BoxShadow(blurRadius: 7)],
+                                        shape: BoxShape.circle),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Image.asset(
+                                        'assets/Images/coat.png',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Dry Cleaning'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        HomeStoreListBuilder()));
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 70,
+                                    width: 100,
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [BoxShadow(blurRadius: 7)],
+                                        shape: BoxShape.circle),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        'assets/Images/carpet-cleaner.png',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Carpet Clean'),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          HomeStoreListBuilder()));
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 70,
+                                      width: 100,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [BoxShadow(blurRadius: 7)],
+                                          shape: BoxShape.circle),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          'assets/Images/washing-clothes.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Laudary\nPremium',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          HomeStoreListBuilder()));
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 70,
+                                      width: 100,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [BoxShadow(blurRadius: 7)],
+                                          shape: BoxShape.circle),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          'assets/Images/cleaning.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Sofa\nCleaning',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          HomeStoreListBuilder()));
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 70,
+                                      width: 100,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [BoxShadow(blurRadius: 7)],
+                                          shape: BoxShape.circle),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          'assets/Images/hand-sanitizer.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Sanitization\n  ',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -475,6 +950,7 @@ class _MainScreenState extends State<MainScreen> {
                       'Popular Laundary Nearby',
                       style: TextStyle(
                         fontSize: 27,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -507,7 +983,7 @@ class _MainScreenState extends State<MainScreen> {
                                         ),
                                         child: Center(
                                             child: Image.asset(
-                                          'assets/Images/washing.png',
+                                          'assets/Images/laundry.jpg',
                                           fit: BoxFit.contain,
                                         ))),
                                   ),
@@ -591,6 +1067,7 @@ class _MainScreenState extends State<MainScreen> {
                       'Happy Cutsomers',
                       style: TextStyle(
                         fontSize: 27,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -669,6 +1146,7 @@ class _MainScreenState extends State<MainScreen> {
                       'Other Home Services',
                       style: TextStyle(
                         fontSize: 27,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -717,7 +1195,7 @@ class _MainScreenState extends State<MainScreen> {
                                       height: 90,
                                       width: 70,
                                       child: Image.asset(
-                                          'assets/Images/water_tap.png')),
+                                          'assets/Images/plumber.png')),
                                   const Text('Plumber',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -768,11 +1246,12 @@ class _MainScreenState extends State<MainScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.all(18.0),
+                    padding: EdgeInsets.only(top: 18.0, bottom: 18.0),
                     child: Text(
                       'Testmonials',
                       style: TextStyle(
                         fontSize: 27,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -880,7 +1359,11 @@ class _MainScreenState extends State<MainScreen> {
                       'We keep you &\n your laundary safe',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
-                    Image.asset('assets/Images/washing.png')
+                    SizedBox(
+                      height: 120,
+                      width: 150,
+                      child: Image.asset('assets/Images/laundry2.png'),
+                    ),
                   ],
                 ),
               ),

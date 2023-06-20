@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
+import 'package:pietycustomer/UILayer/Screens/HomeScreens/HomePage.dart';
+import 'package:pietycustomer/UILayer/Screens/StoreDescriptionScreens/StoreDescriptionScreenV2.dart';
 import '../BloCLayer/AdminBloc.dart';
 import '../DataLayer/Services/HandleSignIn.dart';
 import '../DataLayer/Services/cloudMessaging.dart';
@@ -15,14 +17,13 @@ import 'package:provider/provider.dart';
 
 import 'BloCLayer/ChatBloc.dart';
 import 'BloCLayer/OrderBloc.dart';
-import 'BloCLayer/StoreBloc.dart';
 import 'BloCLayer/UserBloc.dart';
 import 'DataLayer/Models/Other/Enums.dart';
 import 'UILayer/Screens/HomeScreens/HomeScreen.dart';
-import 'UILayer/Screens/HomeScreens/HomeScreen_v2.dart';
 import 'UILayer/Screens/LandingScreen.dart';
 import 'UILayer/Screens/SettingsScreens/SettingsScreen.dart';
 import 'UILayer/Screens/StoreDescriptionScreens/StoreDescriptionScreen.dart';
+import 'UILayer/Screens/StoreDescriptionScreens/StoreDescriptionScreen_v2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,13 +68,14 @@ class MyApp extends StatelessWidget {
                       textTheme: GoogleFonts.dmSansTextTheme()),
                   home: HandleSignIn(),
                   routes: {
+                    Home.route:(context) => Home(),
                     LandingScreen.route: (context) => LandingScreen(),
                     HomeScreen.route: (context) => HomeScreen(),
                     SettingsScreen.route: (context) => SettingsScreen(),
                     // CheckoutScreen.route: (context) => CheckoutScreen(),
                     // ServicesScreen.route: (context) => ServicesScreen(),
                     StoreDescriptionScreen.route: (context) =>
-                        StoreDescriptionScreen(),
+                        StoreDescriptionScreenV2(),
                   },
                 ),
               ),
