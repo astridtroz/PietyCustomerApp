@@ -273,9 +273,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                     onPressed: () {
                                       DatePicker.showDatePicker(context,
-                                          theme: DatePickerTheme(
+                                        /*  theme: DatePickerTheme(
                                             containerHeight: 210.0,
-                                          ),
+                                          ),*/
                                           showTitleActions: true,
                                           minTime: DateTime.now(),
                                           maxTime: DateTime(2026, 12, 31),
@@ -327,9 +327,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         backgroundColor: Colors.white),
                                     onPressed: () {
                                       DatePicker.showTimePicker(context,
-                                          theme: DatePickerTheme(
+                                         /* theme: DatePickerTheme(
                                             containerHeight: 210.0,
-                                          ),
+                                          ),*/
                                           showTitleActions: true,
                                           showSecondsColumn: false,
                                           onConfirm: (time) {
