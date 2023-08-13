@@ -10,6 +10,8 @@ import 'package:pietycustomer/BloCLayer/UserEvent.dart';
 import 'package:pietycustomer/DataLayer/Models/UserModels/User.dart';
 import 'package:pietycustomer/DataLayer/Models/UserModels/UserAddress.dart';
 import 'package:pietycustomer/UILayer/Screens/HomeScreens/HomeStoreListBuilder.dart';
+import '../../../DataLayer/Models/StoreModels/Store.dart';
+
 
 TextEditingController _controller = TextEditingController();
 
@@ -22,6 +24,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final StoreBloc storeBloc = StoreBloc.initialize();
   int currentTab = 0;
 
   final List<Widget> screens = [
@@ -38,14 +41,21 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+
     super.dispose();
     _controller.dispose();
   }
-
+  double userLatitude = 37.7749;
+  double userLongitude = -122.4194;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  //  storeBloc.mapEventToState(PrimaryStores(
+    //  latitude: userLatitude,
+    //  longitude: userLongitude,
+   // )
+   // );
   }
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -232,6 +242,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     StoreBloc storeBloc = BlocProvider.of<StoreBloc>(context);
     UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
     // User2 user = userBloc.getUser;
     // String add = userBloc.getSelectedUserAddress.toString();
     return Scaffold(
@@ -699,247 +710,256 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 250,
-                    child: Column(
-                      children: [
-                        Row(
-                          // mainAxisAlignment: MainAxisAlignment.start,
+                    height: 260,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeStoreListBuilder()));
-                              },
-                              child: Column(
+                            Expanded(
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    height: 70,
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [BoxShadow(blurRadius: 7)],
-                                        shape: BoxShape.circle),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        'assets/Images/clean.png',
-                                        fit: BoxFit.contain,
-                                      ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Image.asset(
+                                              'assets/Images/clean.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Wash & Fold'),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Wash & Fold'),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.asset(
+                                              'assets/Images/ironing.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Wash & Iron'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Image.asset(
+                                              'assets/Images/coat.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Dry Cleaning'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.asset(
+                                              'assets/Images/carpet-cleaner.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Carpet Clean'),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeStoreListBuilder()));
-                              },
-                              child: Column(
+                            Padding(
+                              padding: const EdgeInsets.only(top: 18.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    height: 70,
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [BoxShadow(blurRadius: 7)],
-                                        shape: BoxShape.circle),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        'assets/Images/ironing.png',
-                                        fit: BoxFit.contain,
-                                      ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.asset(
+                                              'assets/Images/washing-clothes.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Laudary\nPremium',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Wash & Iron'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeStoreListBuilder()));
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 70,
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [BoxShadow(blurRadius: 7)],
-                                        shape: BoxShape.circle),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Image.asset(
-                                        'assets/Images/coat.png',
-                                        fit: BoxFit.contain,
-                                      ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.asset(
+                                              'assets/Images/cleaning.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Sofa\nCleaning',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Dry Cleaning'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeStoreListBuilder()));
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 70,
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [BoxShadow(blurRadius: 7)],
-                                        shape: BoxShape.circle),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        'assets/Images/carpet-cleaner.png',
-                                        fit: BoxFit.contain,
-                                      ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomeStoreListBuilder()));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 70,
+                                          width: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [BoxShadow(blurRadius: 7)],
+                                              shape: BoxShape.circle),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Image.asset(
+                                              'assets/Images/hand-sanitizer.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Sanitization\n  ',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Carpet Clean'),
                                   ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          HomeStoreListBuilder()));
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      width: 100,
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [BoxShadow(blurRadius: 7)],
-                                          shape: BoxShape.circle),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset(
-                                          'assets/Images/washing-clothes.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Laudary\nPremium',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          HomeStoreListBuilder()));
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      width: 100,
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [BoxShadow(blurRadius: 7)],
-                                          shape: BoxShape.circle),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset(
-                                          'assets/Images/cleaning.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Sofa\nCleaning',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          HomeStoreListBuilder()));
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      width: 100,
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [BoxShadow(blurRadius: 7)],
-                                          shape: BoxShape.circle),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset(
-                                          'assets/Images/hand-sanitizer.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Sanitization\n  ',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   )
                 ],
               ),
             ),
+
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -947,14 +967,129 @@ class _MainScreenState extends State<MainScreen> {
                   const Padding(
                     padding: EdgeInsets.all(18.0),
                     child: Text(
-                      'Popular Laundary Nearby',
+                      'Popular Laundry Nearby',
                       style: TextStyle(
                         fontSize: 27,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(
+
+
+
+
+                    SizedBox(
+                    height: 200,
+                    child: StreamBuilder<List<Store>>(
+                      stream: storeBloc.selectedStoreStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<Store> stores = snapshot.data!;
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: stores.length,
+                            itemBuilder: ((context, index) {
+                              Store store = stores[index];
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 300,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(7),
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                            ),
+                                            color: Colors.white,
+                                          ),
+                                          child: Center(
+                                            child: Image.asset(
+                                              'assets/Images/laundry.jpg',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 75,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    store.name??'',
+                                                    style: TextStyle(fontSize: 20),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.yellow,
+                                                      ),
+                                                      Text("${store.rating} Rating"),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    store.address as String,
+                                                    style: TextStyle(color: Colors.grey),
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        width: 3,
+                                                        color: Colors.yellow,
+                                                      ),
+                                                      borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(30),
+                                                        bottomRight: Radius.circular(30),
+                                                      ),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text('View Details'),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
+                  )
+
+
+                  /* SizedBox(
                     height: 200,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -1053,7 +1188,7 @@ class _MainScreenState extends State<MainScreen> {
                         );
                       }),
                     ),
-                  )
+                  )*/
                 ],
               ),
             ),
@@ -1112,7 +1247,7 @@ class _MainScreenState extends State<MainScreen> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "\"This app been very helpful\n to at times of loads of luandry in my room.\"",
+                                        "\"This app been very helpful\n to at times of loads of laundry in my room.\"",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color.fromARGB(
@@ -1361,8 +1496,9 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     SizedBox(
                       height: 120,
-                      width: 150,
-                      child: Image.asset('assets/Images/laundry2.png'),
+                      width: 105,
+                      child: Image.asset('assets/Images/laundry2.png',
+                      ),
                     ),
                   ],
                 ),

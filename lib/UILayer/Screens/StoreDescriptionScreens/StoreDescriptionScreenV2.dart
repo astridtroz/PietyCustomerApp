@@ -74,6 +74,7 @@ class _StoreDescriptionScreenV2State extends State<StoreDescriptionScreenV2> {
   @override
   Widget build(BuildContext context) {
     final address = _userBloc!.getSelectedUserLocationAddress;
+    double screenWidth = MediaQuery.of(context).size.width;
     return StreamBuilder<Store>(
         initialData: _storeBloc!.getSingleStore,
         stream: _storeBloc!.singleStoreStream,
@@ -112,15 +113,18 @@ class _StoreDescriptionScreenV2State extends State<StoreDescriptionScreenV2> {
                     child: Row(
                       children: [
                         SizedBox(
-                          height: 60,
-                          width: 250,
-                          child: Text(
-                            snapshot.data!.name.toString(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                          height: 100,
+                          width: .5*screenWidth,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Text(
+                              snapshot.data!.name.toString(),
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.fade,
                             ),
-                            overflow: TextOverflow.fade,
                           ),
                         ),
                         SizedBox(
@@ -171,68 +175,72 @@ class _StoreDescriptionScreenV2State extends State<StoreDescriptionScreenV2> {
                       right: 16,
                       left: 16,
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 200,
-                          child: Center(
-                            child: Text(
-                              snapshot.data!.address!.getDisplayAddress().toString(),
-                              overflow: TextOverflow.fade,
+                    child: SingleChildScrollView(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 100,
+                              width: .3*screenWidth,
+                              child: Center(
+                                child: Text(
+                                  snapshot.data!.address!.getDisplayAddress().toString(),
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Material(
-                                    child: FlutterLocationPicker(
-                                      initPosition: LatLong(
-                                        snapshot
-                                            .data!.storeCoordinates!.latitude,
-                                        snapshot
-                                            .data!.storeCoordinates!.longitude,
-                                      ),
-                                      selectLocationButtonStyle: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.blue),
-                                      ),
-                                      selectLocationButtonText:
-                                          'Store Location ' + dist.toString(),
-                                      initZoom: 11,
-                                      minZoomLevel: 5,
-                                      maxZoomLevel: 16,
-                                      trackMyPosition: false,
-                                      onError: (e) => print(e),
-                                      onPicked: (pickedData) {
-                                        dist = Geolocator.distanceBetween(
-                                          address!.latitude,
-                                          address.longitude,
+                          SizedBox(
+                            width: 40,
+                          ),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Material(
+                                      child: FlutterLocationPicker(
+                                        initPosition: LatLong(
                                           snapshot
                                               .data!.storeCoordinates!.latitude,
-                                          snapshot.data!.storeCoordinates!
-                                              .longitude,
-                                        );
-                                        print("dist"+dist.toString());
-                                        Navigator.of(context).pop;
-                                      },
+                                          snapshot
+                                              .data!.storeCoordinates!.longitude,
+                                        ),
+                                        selectLocationButtonStyle: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.blue),
+                                        ),
+                                        selectLocationButtonText:
+                                            'Store Location ' + dist.toString(),
+                                        initZoom: 11,
+                                        minZoomLevel: 5,
+                                        maxZoomLevel: 16,
+                                        trackMyPosition: false,
+                                        onError: (e) => print(e),
+                                        onPicked: (pickedData) {
+                                          dist = Geolocator.distanceBetween(
+                                            address!.latitude,
+                                            address.longitude,
+                                            snapshot
+                                                .data!.storeCoordinates!.latitude,
+                                            snapshot.data!.storeCoordinates!
+                                                .longitude,
+                                          );
+                                          print("dist"+dist.toString());
+                                          Navigator.of(context).pop;
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: Text("Location On Map"),
+                                );
+                              },
+                              child: Text("Location On Map"),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
 
@@ -279,123 +287,126 @@ class _StoreDescriptionScreenV2State extends State<StoreDescriptionScreenV2> {
                       left: 16,
                       top: 8,
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 3,
-                        ),
-
-                        ///rate list button
-                        TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            side: BorderSide(
-                              width: 1.0,
-                            ),
-                            minimumSize: Size(120, 40),
-                            maximumSize: Size(120, 40),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 3,
                           ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.currency_rupee_outlined,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  'Rate',
-                                  style: TextStyle(
+
+                          ///rate list button
+                          TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                width: 1.0,
+                              ),
+                              minimumSize: Size(120, 40),
+                              maximumSize: Size(120, 40),
+                            ),
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.currency_rupee_outlined,
                                     color: Colors.black,
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-
-                        ///offer button
-                        TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            side: BorderSide(
-                              width: 1.0,
-                            ),
-                            minimumSize: Size(120, 40),
-                            maximumSize: Size(120, 40),
-                          ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.local_offer_outlined,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  'Offer',
-                                  style: TextStyle(
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    'Rate',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
                                     color: Colors.black,
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
+                          SizedBox(
+                            width: 8,
+                          ),
 
-                        ///compare button
-                        TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            side: BorderSide(
-                              width: 1.0,
+                          ///offer button
+                          TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                width: 1.0,
+                              ),
+                              minimumSize: Size(120, 40),
+                              maximumSize: Size(120, 40),
                             ),
-                            minimumSize: Size(120, 40),
-                            maximumSize: Size(130, 40),
-                          ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.bar_chart_outlined,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  'Compare',
-                                  style: TextStyle(
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.local_offer_outlined,
                                     color: Colors.black,
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.black,
-                                ),
-                              ],
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    'Offer',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 8,
+                          ),
+
+                          ///compare button
+                          TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              side: BorderSide(
+                                width: 1.0,
+                              ),
+                              minimumSize: Size(120, 40),
+                              maximumSize: Size(130, 40),
+                            ),
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.bar_chart_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    'Compare',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
@@ -407,90 +418,97 @@ class _StoreDescriptionScreenV2State extends State<StoreDescriptionScreenV2> {
                         borderRadius: BorderRadius.circular(10),
                         color: Color.fromARGB(255, 210, 245, 171),
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Select Service',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Select Service',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 80,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Selected Services: ',
+                                SizedBox(
+                                  width: 80,
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  selectedServices.length == 0
-                                      ? '0'
-                                      : selectedServices.length.toString(),
-                                  style: TextStyle(
-                                    color: Colors.green,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Expanded(
+                                    child: Text(
+                                      'Selected Services: ',
+                                    ),
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    selectedServices.length == 0
+                                        ? '0'
+                                        : selectedServices.length.toString(),
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 8.0,
+                                left: 8.0,
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              right: 8.0,
-                              left: 8.0,
+                              child: Divider(
+                                thickness: 1.5,
+                              ),
                             ),
-                            child: Divider(
-                              thickness: 1.5,
+                            Text(
+                              'Click on the checkbox to select services',
                             ),
-                          ),
-                          Text(
-                            'Click on the checkbox to select services',
-                          ),
 
-                          ///Checkboxes
-                          SizedBox(
-                            height: 200,
-                            width: 300,
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: services.length,
-                              shrinkWrap: true,
-                              itemBuilder: ((context, index) {
-                                return CheckboxListTile(
-                                  title:
-                                      Text(services[index].service.toString()),
-                                  subtitle: Text(services[index].price),
-                                  activeColor: Colors.blueAccent,
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: services[index].isSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      services[index].isSelected = value!;
-                                      if (services[index].isSelected) {
-                                        selectedServices.add(services[index]);
-                                      } else if (!services[index].isSelected) {
-                                        selectedServices
-                                            .remove(services[index]);
-                                      }
-                                      print("services selected" +
-                                          selectedServices.toList().toString());
-                                    });
-                                  },
-                                );
-                              }),
-                            ),
-                          )
-                        ],
+                            ///Checkboxes
+                            SizedBox(
+                              height: 200,
+                              width: 300,
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: services.length,
+                                shrinkWrap: true,
+                                itemBuilder: ((context, index) {
+                                  return CheckboxListTile(
+                                    title:
+                                        Text(services[index].service.toString()),
+                                    subtitle: Text(services[index].price),
+                                    activeColor: Colors.blueAccent,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: services[index].isSelected,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        services[index].isSelected = value!;
+                                        if (services[index].isSelected) {
+                                          selectedServices.add(services[index]);
+                                        } else if (!services[index].isSelected) {
+                                          selectedServices
+                                              .remove(services[index]);
+                                        }
+                                        print("services selected" +
+                                            selectedServices.toList().toString());
+                                      });
+                                    },
+                                  );
+                                }),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -561,53 +579,56 @@ class _StoreDescriptionScreenV2State extends State<StoreDescriptionScreenV2> {
                   SizedBox(
                     width: 240,
                     child: Text(
-                      'Check all the clothes after reciveing in front of delivery partner',
+                      'Check all the clothes after receiving in front of delivery partner',
                       overflow: TextOverflow.fade,
                     ),
                   ),
                   SizedBox(
-                    width: 20,
+                    width: 5,
                   ),
-                  ElevatedButton(
-                    onPressed:  selectedServices.isEmpty || !isSelectedNote
-                                ? () {
-                                    Fluttertoast.showToast(
-                                        msg: "Please Select Services and Also Agree to Store's T&C",
-                                        toastLength: Toast.LENGTH_LONG);
-                                  }
-                                : () {
-                                  List<String> selectedServiceName = [];
-                                  Map<String, int> map = Map();
-                                  for(Service s in selectedServices){
-                                    selectedServiceName.add(s.service);
-                                    map[s.service] = 1;
-                                  }
-                                    _orderBloc!.selectedServicesSink
-                                        .add(selectedServiceName);
-                                    // ServicesScreenArgs args =
-                                    //     ServicesScreenArgs(
-                                    //   services: selectedServices,
-                                    // );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => CheckoutScreen(
-                                          selectedServices: selectedServiceName,
-                                          selectedServicesItems: map,
+                  Flexible(
+                    child: ElevatedButton(
+                      onPressed:  selectedServices.isEmpty || !isSelectedNote
+                                  ? () {
+                                      Fluttertoast.showToast(
+                                          msg: "Please Select Services and Also Agree to Store's T&C",
+                                          toastLength: Toast.LENGTH_LONG);
+                                    }
+                                  : () {
+                                    List<String> selectedServiceName = [];
+                                    Map<String, int> map = Map();
+                                    for(Service s in selectedServices){
+                                      selectedServiceName.add(s.service);
+                                      map[s.service] = 1;
+                                    }
+                                      _orderBloc!.selectedServicesSink
+                                          .add(selectedServiceName);
+                                      // ServicesScreenArgs args =
+                                      //     ServicesScreenArgs(
+                                      //   services: selectedServices,
+                                      // );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CheckoutScreen(
+                                            selectedServices: selectedServiceName,
+                                            selectedServicesItems: map,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                    child: Text(
-                      'Continue',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                                      );
+                                    },
+                      child: Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
                       ),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.orange),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.orange),
+                      ),
                     ),
                   ),
                 ],

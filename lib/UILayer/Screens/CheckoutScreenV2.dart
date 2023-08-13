@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geocoding/geocoding.dart';
@@ -109,7 +109,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         .textTheme
         .apply(bodyColor: titleColor, displayColor: themeColor);
 
-    TextStyle titleStyle = textTheme.subtitle1!
+    TextStyle titleStyle = textTheme.titleMedium!
         .copyWith(fontWeight: FontWeight.bold, letterSpacing: 1);
     _userBloc = BlocProvider.of<UserBloc>(context);
     _orderBloc = BlocProvider.of<OrderBloc>(context);
@@ -273,7 +273,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                     onPressed: () {
                                       DatePicker.showDatePicker(context,
-                                        /*  theme: DatePickerTheme(
+                                        /*  theme: DatePickerThemes(
                                             containerHeight: 210.0,
                                           ),*/
                                           showTitleActions: true,
@@ -333,14 +333,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           showTitleActions: true,
                                           showSecondsColumn: false,
                                           onConfirm: (time) {
-                                        _time = '${time.hour} : ${time.minute}';
-                                        _pickUpDateTimeRequested = DateTime(
-                                            _pickedDate!.year,
-                                            _pickedDate!.month,
-                                            _pickedDate!.day,
-                                            time.hour,
-                                            time.minute);
-                                        // setState(() {});
+                                            if(time !=null && _pickedDate!=null){
+                                        setState(() {
+                                            _time = '${time.hour} : ${time.minute}';
+                                            _pickUpDateTimeRequested = DateTime(
+                                                _pickedDate!.year,
+                                                _pickedDate!.month,
+                                                _pickedDate!.day,
+                                                time.hour,
+                                                time.minute);
+                                            });};
                                       },
                                           currentTime: DateTime.now(),
                                           locale: LocaleType.en);
@@ -397,7 +399,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           children: <Widget>[
                             Text(
                               'Pickup Address',
-                              style: textTheme.subtitle1!.copyWith(
+                              style: textTheme.titleMedium!.copyWith(
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1),
                             ),
@@ -564,7 +566,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                         child: Text(
                           "PLACE ORDER",
-                          style: textTheme.button!.copyWith(
+                          style: textTheme.labelLarge!.copyWith(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         onPressed: _date == "Pick Date" ||

@@ -31,8 +31,8 @@ void main() async {
   FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   // Pass all uncaught errors from the framework to Crashlytics.
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  NotificationHandler _notificationHandler = NotificationHandler();
 
+  NotificationHandler _notificationHandler = NotificationHandler();
   CloudMessaging _cloudMessaging =
       CloudMessaging.withNotification(_notificationHandler);
   Constants.fcmToken = await _cloudMessaging.getToken();

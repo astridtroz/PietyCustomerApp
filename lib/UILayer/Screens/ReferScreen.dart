@@ -34,7 +34,7 @@ class _ReferScreenState extends State<ReferScreen> with WidgetsBindingObserver {
                   Center(
                     child: Text(
                       "Want to have more Discount?",
-                      style: Theme.of(context).textTheme.headline2,
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                   ),
                   SizedBox(
@@ -69,7 +69,7 @@ class _ReferScreenState extends State<ReferScreen> with WidgetsBindingObserver {
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Text(
                       "Invite your friends to experience the joys of Piety Laundry and you can gain PIETY COINS, which you can use to pay your Laundry Bills",
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                       textAlign: TextAlign.justify,
                     ),
                   ),

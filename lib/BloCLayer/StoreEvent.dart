@@ -104,3 +104,11 @@ class SearchBasedStore extends StoreEvent {
   final String serviceName;
   SearchBasedStore({required this.serviceName});
 }
+
+class PrimaryStores extends StoreEvent {
+  final double latitude;
+  final double longitude;
+
+PrimaryStores({required this.latitude, required this.longitude});
+}
+

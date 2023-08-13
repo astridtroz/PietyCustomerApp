@@ -159,7 +159,7 @@ class StoreBloc extends Bloc {
     mapEventToState(FetchLocalDB());
   }
 
-  void mapEventToState(StoreEvent event) async {
+   mapEventToState(StoreEvent event) async {
     if (event is FetchLocalDB) {
       print("GetAll Store from localDB");
       List<Store> stores = [];
@@ -434,7 +434,29 @@ class StoreBloc extends Bloc {
       });
       selectedStore = intermediateStore;
       selectedStoreSink.add(selectedStore!);
-    } else if (event is FilterBasedStore) {
+    }
+
+    else if (event is PrimaryStores){
+      selectedStore=[];
+      List<Store> intermediateStore=[];
+      getAllStore.forEach((store){
+        double distanceInMeters = Geolocator.distanceBetween(
+            event.latitude, event.longitude, store.storeCoordinates!.latitude, store.storeCoordinates!.longitude);
+        if(distanceInMeters<KmToMeter.getMeterFromKM(store.selfDeliveryDistance!)){
+          intermediateStore.add(store);
+        }
+      });
+      intermediateStore.sort((a, b) => b.rating!.compareTo(a.rating!));
+      selectedStore=intermediateStore;
+      selectedStoreSink.add(selectedStore!);
+      print ("selected=");
+      print(selectedStore);
+
+    }
+
+
+
+      else if (event is FilterBasedStore) {
       // selectedStore = [];
       List<Store> intermediateStore = [];
       if (event.isRatingFilter) {
@@ -459,6 +481,7 @@ class StoreBloc extends Bloc {
         mapEventToState(InitialData(currentPosition: place));
       });
     }
+
   }
 
   @override
