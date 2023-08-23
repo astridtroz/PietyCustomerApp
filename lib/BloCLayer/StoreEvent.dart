@@ -106,8 +106,8 @@ class SearchBasedStore extends StoreEvent {
 }
 
 class PrimaryStores extends StoreEvent {
-  final double latitude;
-  final double longitude;
+  late final double latitude;
+  late final double longitude;
 
 PrimaryStores({required this.latitude, required this.longitude});
 }

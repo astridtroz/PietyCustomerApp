@@ -69,6 +69,22 @@ class StoreBloc extends Bloc {
   List<Store>? selectedStore;
   get getSelectedStore => this.selectedStore;
 
+
+
+  List<Store>? primaryStore;
+  get getPrimaryStore=>this.getPrimaryStore;
+
+/////////////////////Stream for primary stores
+  StreamController<List<Store>> _primaryStoreController=
+  StreamController<List<Store>>.broadcast();
+  StreamSink<List<Store>> get storePrimaryListSink=>
+  _primaryStoreController.sink;
+  Stream<List<Store>>get storePrimaryListStream =>
+  _primaryStoreController.stream;
+
+
+
+
   StreamController<List<Offer>> _storeOfferListController =
       StreamController<List<Offer>>.broadcast();
   StreamSink<List<Offer>> get storeOfferListSink =>
@@ -158,6 +174,7 @@ class StoreBloc extends Bloc {
   StoreBloc.initialize() {
     mapEventToState(FetchLocalDB());
   }
+
 
    mapEventToState(StoreEvent event) async {
     if (event is FetchLocalDB) {
@@ -435,25 +452,47 @@ class StoreBloc extends Bloc {
       selectedStore = intermediateStore;
       selectedStoreSink.add(selectedStore!);
     }
+////////////////////////////////////////////////
+     // ...
+    else if(event is PrimaryStores) {
+  primaryStore = [];
+  List<Store> intermediateStore = [];
 
-    else if (event is PrimaryStores){
-      selectedStore=[];
-      List<Store> intermediateStore=[];
-      getAllStore.forEach((store){
-        double distanceInMeters = Geolocator.distanceBetween(
-            event.latitude, event.longitude, store.storeCoordinates!.latitude, store.storeCoordinates!.longitude);
-        if(distanceInMeters<KmToMeter.getMeterFromKM(store.selfDeliveryDistance!)){
-          intermediateStore.add(store);
-        }
-      });
-      intermediateStore.sort((a, b) => b.rating!.compareTo(a.rating!));
-      selectedStore=intermediateStore;
-      selectedStoreSink.add(selectedStore!);
-      print ("selected=");
-      print(selectedStore);
+  FirebaseFirestore.instance.collection("stores").get().then((querySnapshot) {
+  querySnapshot.docs.forEach((storeDoc) {
+  var storeData = storeDoc.data();
+  if(storeData.containsKey("storeCoordinates")&&  storeData["storeCoordinates"].containsKey("lat") &&
+      storeData["storeCoordinates"].containsKey("lng")){
+  double storeLatitude = storeData["storeCoordinates"]["lat"];
+  double storeLongitude = storeData["storeCoordinates"]["lng"];
 
+  double distanceInMeters = Geolocator.distanceBetween(
+  event.latitude,
+  event.longitude,
+  storeLatitude,
+  storeLongitude,
+  );
+
+  if (distanceInMeters < 1000000.0) {
+
+    try {
+
+      intermediateStore.add(Store.fromMap(storeData));
+      print("Added to intermediateStore");
+    } catch (e) {
+      print("Error adding to intermediateStore: $e");
     }
 
+    intermediateStore.sort((a, b) => b.rating!.compareTo(a.rating!));
+    primaryStore = intermediateStore;
+    print("Adding data to stream: ${primaryStore?.length}");
+    storePrimaryListSink.add(primaryStore!);
+  }}}
+  );}
+  );}
+// ...
+
+/////////////////////////////////////////////
 
 
       else if (event is FilterBasedStore) {
@@ -499,5 +538,7 @@ class StoreBloc extends Bloc {
     _storeOfferListController.close();
     _allStoreController.close();
     _featuredOfferStoreController.close();
+    _primaryStoreController.close();
+
   }
 }

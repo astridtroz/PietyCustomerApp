@@ -24,6 +24,7 @@ import 'UILayer/Screens/LandingScreen.dart';
 import 'UILayer/Screens/SettingsScreens/SettingsScreen.dart';
 import 'UILayer/Screens/StoreDescriptionScreens/StoreDescriptionScreen.dart';
 import 'UILayer/Screens/StoreDescriptionScreens/StoreDescriptionScreen_v2.dart';
+import 'UILayer/Screens/StoreDescriptionScreens/StoresDescriptionScreenV3.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,16 +67,17 @@ class MyApp extends StatelessWidget {
                   theme: ThemeData(
                       primarySwatch: Colors.blue,
                       textTheme: GoogleFonts.dmSansTextTheme()),
-                  home: HandleSignIn(),
+                  home:HandleSignIn(),
+                  //HandleSignIn(),
                   routes: {
                     Home.route:(context) => Home(),
                     LandingScreen.route: (context) => LandingScreen(),
                     HomeScreen.route: (context) => HomeScreen(),
                     SettingsScreen.route: (context) => SettingsScreen(),
-                    // CheckoutScreen.route: (context) => CheckoutScreen(),
-                    // ServicesScreen.route: (context) => ServicesScreen(),
+                  //   CheckoutScreen.route: (context) => CheckoutScreen(),
+                   //  ServicesScreen.route: (context) => ServicesScreen(),
                     StoreDescriptionScreen.route: (context) =>
-                        StoreDescriptionScreenV2(),
+                        StoreDescription(),
                   },
                 ),
               ),

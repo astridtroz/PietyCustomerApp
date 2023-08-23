@@ -25,6 +25,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final StoreBloc storeBloc = StoreBloc.initialize();
+
   int currentTab = 0;
 
   final List<Widget> screens = [
@@ -41,21 +42,21 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-
+    storeBloc.dispose();
     super.dispose();
     _controller.dispose();
   }
-  double userLatitude = 37.7749;
-  double userLongitude = -122.4194;
+
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
-  //  storeBloc.mapEventToState(PrimaryStores(
-    //  latitude: userLatitude,
-    //  longitude: userLongitude,
-   // )
-   // );
+    storeBloc.mapEventToState(PrimaryStores(
+      latitude: 18.598393599999998,
+      longitude: 73.7606768,
+    ));
+
   }
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -981,8 +982,9 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(
                     height: 200,
                     child: StreamBuilder<List<Store>>(
-                      stream: storeBloc.selectedStoreStream,
+                      stream: storeBloc.storePrimaryListStream,
                       builder: (context, snapshot) {
+                        print("StreamBuilder rebuilt with snapshot: ${snapshot.data}");
                         if (snapshot.hasData) {
                           List<Store> stores = snapshot.data!;
                           return ListView.builder(
