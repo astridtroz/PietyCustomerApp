@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
+import 'package:pietycustomer/DataLayer/Models/StoreModels/RateList.dart';
 import 'package:pietycustomer/UILayer/Screens/HomeScreens/HomePage.dart';
 import 'package:pietycustomer/UILayer/Screens/StoreDescriptionScreens/StoreDescriptionScreenV2.dart';
 import '../BloCLayer/AdminBloc.dart';

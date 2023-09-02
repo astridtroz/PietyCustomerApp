@@ -3,14 +3,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:pietycustomer/BloCLayer/OrderBloc.dart';
 import 'package:pietycustomer/BloCLayer/StoreBlocV2.dart';
 import 'package:pietycustomer/BloCLayer/StoreEvent.dart';
 import 'package:pietycustomer/BloCLayer/UserBloc.dart';
 import 'package:pietycustomer/DataLayer/Models/OrderModels/ServiceV2.dart';
+import 'package:pietycustomer/DataLayer/Models/StoreModels/RateList.dart';
 import 'package:pietycustomer/DataLayer/Models/StoreModels/Store.dart';
 import 'package:pietycustomer/UILayer/Screens/CheckoutScreenV2.dart';
+
+import '../../Widgets/RateListContainer.dart';
 bool isSelectedNote = false;
 var dist = 0.0;
 List<Service> services = [
@@ -25,7 +29,10 @@ List<Service> services = [
 List<Service> selectedServices = [];
 class StoreDescription extends StatefulWidget {
   static String route = "store_description_screen";
+
   const StoreDescription({Key? key}) : super(key: key);
+
+
 
   @override
   State<StoreDescription> createState() => _StoreDescriptionState();
@@ -33,9 +40,23 @@ class StoreDescription extends StatefulWidget {
 
 class _StoreDescriptionState extends State<StoreDescription> {
 
+  List<String> _selectedText = [];
+  Map<String, double> _prices = Map<String, double>();
+  Map<String, int> _numberOfItems = Map<String, int>();
+  String _searchField = "All";
+
+  String dropDownValue = "All";
   StoreBloc? _storeBloc;
   OrderBloc? _orderBloc;
+  var init = true;
+
+  List<RateListItem> tempFituredList = [];
+
+  // Visbility Text..
+
+  bool visibilityText = false;
   UserBloc? _userBloc;
+
 
   @override
 
@@ -256,9 +277,310 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                     ),
                                   ),
                                 ),
+                                ///open close tag
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 16,
+                                    left: 16,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          "Open ",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                          ),
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          " - Closes at " +
+                                              snapshot.data!.closingHour.toString() +
+                                              " PM",
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               SizedBox(
                                 height: 10,
                               ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 16,
+                                    left: 16,
+                                    top: 8,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 3,
+                                        ),
+
+
+
+                                        ///rate list button
+                                        TextButton(
+                                          onPressed: () {
+                                            ///rate list
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  _storeBloc!.mapEventToState(GetRateListOfType(
+                                                      rateListType:
+                                                      "All",
+                                                      storeID: _storeBloc!
+                                                          .getSingleStore
+                                                          .uid!));
+
+                                                  return SingleChildScrollView(
+
+                                                  child: Padding(
+                                                      padding: const EdgeInsets.all(
+                                                          8.0),
+                                                      child:
+                                                      StatefulBuilder(builder: (BuildContext context, StateSetter mySetState) {
+                                                        return SingleChildScrollView(
+                                                          child: Container(
+                                                              height: MediaQuery.of(context).size.height * 0.67,
+                                                              width: MediaQuery.of(context).size.width,
+                                                              child: Column(children: <Widget>[
+                                                                StreamBuilder<List<String>>(
+                                                                    initialData: _storeBloc!.getCategoryRateList,
+                                                                    stream: _storeBloc!.categoryListOfStoreStream,
+                                                                    builder: (context, snapshot) {
+                                                                      if (snapshot.hasData) {
+                                                                        if (snapshot.hasError) {
+                                                                          return Text("Something went wrong in Cate");
+                                                                        } else {
+                                                                          List<String> items = snapshot.data!;
+                                                                          print(items.toString());
+                                                                          if (!items.contains("All")) {
+                                                                            items.add("All");
+                                                                          }
+                                                                          return Container(
+                                                                            padding: const EdgeInsets.only(left: 10, right: 10),
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              border: Border.all(color: Colors.grey),
+                                                                            ),
+                                                                            child: DropdownButton<String>(
+                                                                              isDense: true,
+                                                                              value: dropDownValue,
+                                                                              onChanged: (String? val) {
+                                                                                mySetState(() {
+                                                                                  dropDownValue = val!;
+                                                                                });
+                                                                                _storeBloc!.mapEventToState(GetRateListOfType(rateListType: dropDownValue, storeID: _storeBloc!.getSingleStore.uid!));
+                                                                              },
+                                                                              items: items.map<DropdownMenuItem<String>>((String value) {
+                                                                                return DropdownMenuItem<String>(
+                                                                                  value: value,
+                                                                                  child: Text(value),
+                                                                                );
+                                                                              }).toList(),
+                                                                            ),
+                                                                          );
+                                                                        }
+                                                                      } else {
+                                                                        return Text("Loading... 1");
+                                                                      }
+                                                                    }),
+                                                                StreamBuilder<RateList>(
+                                                                    initialData: _storeBloc!.getInitialRateList,
+                                                                    stream: _storeBloc!.singleRateListStream,
+                                                                    builder: (BuildContext context, AsyncSnapshot<RateList> snapshot) {
+                                                                      print("\nRebuilded\n");
+                                                                      if (snapshot.hasData) {
+                                                                        return Container(
+                                                                          height: MediaQuery.of(context).size.height * 0.62,
+                                                                          child: ListView(
+                                                                            children: snapshot.data!.cumulativeRateList.keys.map((category) {
+                                                                              return GFAccordion(
+                                                                                key: ObjectKey(category),
+                                                                                title: "$category",
+                                                                                contentChild: Column(children: <Widget>[
+                                                                                  Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                    children: <Widget>[
+                                                                                      Text(
+                                                                                        "Service",
+                                                                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        "Price",
+                                                                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                  Divider(
+                                                                                    color: Colors.black,
+                                                                                  ),
+                                                                                  Column(
+                                                                                    children: snapshot.data!.cumulativeRateList[category]!.map((RateListItem rateListItem) {
+                                                                                      return Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                        children: <Widget>[
+                                                                                          Text(
+                                                                                            "${rateListItem.serviceName}",
+                                                                                          ),
+                                                                                          Text(
+                                                                                            rateListItem.serviceRate!.isFixed! ? "\u{20B9} ${rateListItem.serviceRate?.fixed} (FIX)" : "\u{20B9} ${rateListItem.serviceRate?.low} - \u{20B9} ${rateListItem.serviceRate?.high}",
+                                                                                          )
+                                                                                        ],
+                                                                                      );
+                                                                                    }).toList(),
+                                                                                  ),
+                                                                                ]),
+                                                                              );
+                                                                            }).toList(),
+                                                                          ),
+                                                                        );
+                                                                        // List<RateListItem> temp = snapshot.data;
+                                                                        // return Container(
+                                                                        //   height: MediaQuery.of(context).size.height * 0.6,
+                                                                        //   child: ListView.builder(
+                                                                        //     shrinkWrap: true,
+                                                                        //     physics: ClampingScrollPhysics(),
+                                                                        //     itemCount: temp.length,
+                                                                        //     itemBuilder: (context, count) {
+                                                                        //       return RateListContainer(temp, count);
+                                                                        //     },
+                                                                        //   ),
+                                                                        // );
+                                                                      } else {
+                                                                        return Center(
+                                                                          child: Text("Something went Wrong in Items"),
+                                                                        );
+                                                                      }
+                                                                    })
+                                                              ])),
+                                                        );
+                                                      }
+                                                      )
+                                                  )
+                                                  );
+                                                });
+                                          },
+                                          style: TextButton.styleFrom(
+                                            side: BorderSide(
+                                              width: 1.0,
+                                            ),
+                                            minimumSize: Size(120, 40),
+                                            maximumSize: Size(120, 40),
+                                          ),
+                                          child: Center(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.currency_rupee_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Text(
+                                                  'Rate',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.arrow_drop_down,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+
+
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+
+                                        ///offer button
+                                        TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            side: BorderSide(
+                                              width: 1.0,
+                                            ),
+                                            minimumSize: Size(120, 40),
+                                            maximumSize: Size(120, 40),
+                                          ),
+                                          child: Center(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.local_offer_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Text(
+                                                  'Offer',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.arrow_drop_down,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+
+                                        ///compare button
+                                        TextButton(
+                                          onPressed: () {},
+                                          style: TextButton.styleFrom(
+                                            side: BorderSide(
+                                              width: 1.0,
+                                            ),
+                                            minimumSize: Size(120, 40),
+                                            maximumSize: Size(130, 40),
+                                          ),
+                                          child: Center(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.bar_chart_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Text(
+                                                  'Compare',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.arrow_drop_down,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
                                 ///services list
                                 Container(height: 250,
                                   child: ListView.builder(
